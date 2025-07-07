@@ -1,3 +1,5 @@
+import json
+import re
 # ============================
 # 1. Input Preprocessing
 # ============================
@@ -5,10 +7,26 @@
 # - Load input transcript (Slack/Zoom) from file
 # - Parse speakers, timestamps, messages
 # - Optionally: Normalize text (remove emojis, filler, noise)
-
 def load_and_preprocess_transcript(file_path):
-    with open(file_path) as f:
-        print(f.read())
+    with open(file_path, 'r', encoding='utf-8') as f:
+        raw_data = json.load(f)  # ✅ Parse JSON into Python list/dict
+
+    processed = []
+    for entry in raw_data:
+        text = entry.get("text", "")
+
+        # remove emojis
+        text = re.sub(r'[\u2600-\u26FF\u2700-\u27BF]+', '', text)  
+        # remove fillers
+        text = re.sub(r'\b(uh+|um+)\b', '', text, flags=re.IGNORECASE)  
+        text = text.strip()
+
+        processed.append({
+            "speaker": entry.get("user") or entry.get("speaker"),
+            "timestamp": entry.get("timestamp"),
+            "text": text
+        })
+    return processed
 
 
 # ============================
