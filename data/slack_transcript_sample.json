@@ -1,0 +1,27 @@
+[
+  {
+    "user": "Alice (PM)",
+    "timestamp": "2025-07-06T10:01:00",
+    "text": "Hey team, we need to finalize the Q3 roadmap today."
+  },
+  {
+    "user": "Bob (Dev)",
+    "timestamp": "2025-07-06T10:02:15",
+    "text": "I still have two blockers on the new onboarding flow."
+  },
+  {
+    "user": "Carol (Designer)",
+    "timestamp": "2025-07-06T10:03:45",
+    "text": "Are we including the updated illustrations from last week?"
+  },
+  {
+    "user": "Alice (PM)",
+    "timestamp": "2025-07-06T10:05:10",
+    "text": "Yes, please include them. Also, let’s push the launch to August 1st."
+  },
+  {
+    "user": "Bob (Dev)",
+    "timestamp": "2025-07-06T10:06:30",
+    "text": "Sounds good. I’ll update the JIRA tasks accordingly."
+  }
+]

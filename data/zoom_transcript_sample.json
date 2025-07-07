@@ -1,0 +1,27 @@
+[
+  {
+    "speaker": "Host",
+    "timestamp": "00:00:02",
+    "text": "Welcome everyone to the weekly product sync."
+  },
+  {
+    "speaker": "Engineer 1",
+    "timestamp": "00:00:07",
+    "text": "We made progress on the login bug. It's fixed in staging now."
+  },
+  {
+    "speaker": "PM",
+    "timestamp": "00:00:15",
+    "text": "Great. Can we schedule QA testing by Thursday?"
+  },
+  {
+    "speaker": "Engineer 2",
+    "timestamp": "00:00:22",
+    "text": "Yes, I’ll ask QA to prioritize it."
+  },
+  {
+    "speaker": "PM",
+    "timestamp": "00:00:30",
+    "text": "Also, please start preparing release notes."
+  }
+]
