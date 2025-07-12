@@ -14,7 +14,7 @@ os.makedirs(CACHE_DIR, exist_ok=True)
 load_dotenv()
 
 # ============================
-# 1. Input Preprocessing
+# Input Preprocessing
 # ============================
 def load_and_preprocess_transcript(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -35,7 +35,7 @@ def load_and_preprocess_transcript(file_path):
     return processed
 
 # ============================
-# 2. Prompt Construction
+# Prompt Construction
 # ============================
 def build_prompt(transcript, mode="general", query=None):
     dialogue = ""
@@ -49,14 +49,41 @@ def build_prompt(transcript, mode="general", query=None):
     return instruction + dialogue.strip()
 
 # ============================
-# 3. LLM Inference (Mock)
+# Cache prompt
 # ============================
-def run_summarizer(prompt, model="gpt-3.5-turbo"):
-    print("[Dummy Run] Skipping OpenAI API call")
-    return "Summary: This is a test summary.\nAction Items:\n- Test the system\n- Confirm Docker is working"
+def get_cache_path(prompt, model="gpt-3.5-turbo"):
+    key = hashlib.md5((model + prompt).encode("utf-8")).hexdigest()
+    return os.path.join(CACHE_DIR, f"{key}.json")
 
 # ============================
-# 4. Postprocessing Output
+# LLM Inference (Mock)
+# ============================
+def run_summarizer(prompt, model="gpt-3.5-turbo"):
+    cache_path = get_cache_path(prompt, model)
+
+    # Use cache if it exists
+    if os.path.exists(cache_path):
+        print("[Cache] Using cached response")
+        with open(cache_path, "r", encoding="utf-8") as f:
+            return json.load(f)["response"]
+
+    # Call OpenAI API if not cached
+    client = OpenAI()
+    response = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    print("[API] Using called OpenAI API")
+    output = response.choices[0].message.content
+
+    # Save to cache
+    with open(cache_path, "w", encoding="utf-8") as f:
+        json.dump({"prompt": prompt, "response": output}, f, ensure_ascii=False, indent=2)
+
+    return output
+
+# ============================
+# Postprocessing Output
 # ============================
 def parse_output(raw_llm_response):
     sections = raw_llm_response.strip().split("Action Items:")
@@ -65,7 +92,7 @@ def parse_output(raw_llm_response):
     return {"summary": summary, "action_items": action_items}
 
 # ============================
-# 5. Output Formatting
+# Output Formatting
 # ============================
 def save_summary(summary_dict, output_path):
     with open(output_path, "w", encoding="utf-8") as f:
@@ -73,7 +100,7 @@ def save_summary(summary_dict, output_path):
     print(f"Summary saved to {output_path}")
 
 # ============================
-# 6. Benchmark Logging
+# Benchmark Logging
 # ============================
 def log_experiment(inputs, outputs, metadata):
     log = {
