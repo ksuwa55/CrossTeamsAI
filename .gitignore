@@ -1,1 +1,25 @@
-/venv
+# Output summaries and logs
+/output/
+/logs/
+/cache/
+/references/
+
+# Python stuff
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment
+.env
+
+# VSCode settings
+.vscode/
+
+# OS-generated files
+.DS_Store
+
+# Docker
+Dockerfile
+requirements.txt
+run_eval.sh
+run_main.sh
