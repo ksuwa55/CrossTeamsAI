@@ -3,6 +3,7 @@
 /logs/
 /cache/
 /references/
+/data/QMSum_test
 
 # Python stuff
 __pycache__/
@@ -21,5 +22,4 @@ __pycache__/
 # Docker
 Dockerfile
 requirements.txt
-run_eval.sh
-run_main.sh
+*.sh
