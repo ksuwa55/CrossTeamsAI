@@ -80,14 +80,15 @@ FEW_SHOT = (
 
 def build_query_prompt(query: str, transcript_slice: str,
                        phrases_to_preserve: Optional[List[str]] = None,
-                       use_few_shot: bool = False) -> str:
+                       use_few_shot: bool = False,
+                       max_sentences: int = 4) -> str:
     prefix = FEW_SHOT if use_few_shot else ""
     keep = ""
     if phrases_to_preserve:
         keep = "Try to include these exact phrases if factually correct: " + "; ".join(phrases_to_preserve) + "\n\n"
     return (
         prefix +
-        "Task: answer ONLY the query using facts from the transcript slice. "
+        f"Task: answer ONLY the query using facts from the transcript slice in at most {max_sentences} sentences. "
         "Be concise but complete; include all key facts. Reuse wording from the slice when possible. No preamble.\n\n"
         f"{keep}"
         f"Query: '{query}'\n\n"
@@ -95,13 +96,14 @@ def build_query_prompt(query: str, transcript_slice: str,
     )
 
 def build_reduce_prompt(query: str, partial_summaries: List[str],
-                        phrases_to_preserve: Optional[List[str]] = None) -> str:
+                        phrases_to_preserve: Optional[List[str]] = None,
+                        max_sentences: int = 4) -> str:
     joined = "\n\n--- PART ---\n\n".join(partial_summaries)
     keep = ""
     if phrases_to_preserve:
         keep = "Try to include these exact phrases if factually correct: " + "; ".join(phrases_to_preserve) + "\n\n"
     return (
-        "Task: merge the partial answers into one coherent answer. "
+        f"Task: merge the partial answers into one coherent answer of at most {max_sentences} sentences. "
         "Eliminate duplicates; keep all key facts. Reuse wording from the parts when possible. No preamble.\n\n"
         f"{keep}"
         f"Query: '{query}'\n\n"
@@ -110,7 +112,8 @@ def build_reduce_prompt(query: str, partial_summaries: List[str],
 
 SYSTEM_PROMPT = (
     "You are a precise, query-focused meeting summarizer. "
-    "Write concise, factual summaries. "
+    "Write concise, factual summaries in 2–4 sentences. "
+    "Match the length and detail level of a typical reference abstract. "
     "Do not add any information that is not supported by the transcript."
 )
 
@@ -153,7 +156,8 @@ def main():
 
     # Decoding knobs
     ap.add_argument("--temperature", type=float, default=0.0)
-    ap.add_argument("--max_tokens", type=int, default=320)
+    ap.add_argument("--max_tokens", type=int, default=180)
+    ap.add_argument("--max_sentences", type=int, default=4, help="Max sentences in output (length control)")
 
     args = ap.parse_args()
     random.seed(args.seed)
@@ -203,7 +207,7 @@ def main():
 
             partials = []
             for ch in chunks:
-                map_prompt = build_query_prompt(query, ch, phrases_to_preserve=phrases, use_few_shot=(args.few_shot == "on"))
+                map_prompt = build_query_prompt(query, ch, phrases_to_preserve=phrases, use_few_shot=(args.few_shot == "on"), max_sentences=args.max_sentences)
                 part = ms.run_summarizer(
                     map_prompt,
                     model=args.model,
@@ -216,7 +220,7 @@ def main():
             if len(partials) == 1:
                 pred = partials[0]
             else:
-                reduce_prompt = build_reduce_prompt(query, partials, phrases_to_preserve=phrases)
+                reduce_prompt = build_reduce_prompt(query, partials, phrases_to_preserve=phrases, max_sentences=args.max_sentences)
                 pred = ms.run_summarizer(
                     reduce_prompt,
                     model=args.model,
