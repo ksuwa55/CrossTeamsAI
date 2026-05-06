@@ -45,10 +45,7 @@ There are **10 examples**. Each takes about 2–3 minutes. Total time: ~25 minut
 For each example you will see:
 - **Query** — a question about the meeting
 - **Meeting transcript** — an excerpt (or full transcript) from the meeting
-- **Summary A — Baseline** — a summary produced by the baseline system
-- **Summary B — Our Model** — a summary produced by our new model
-
-Rate **each summary** independently on **4 dimensions** (scale 1–5), then answer one overall preference question.
+- **Summary** — a model-generated summary that tries to answer the query
 
 Rate the summary on **4 dimensions**, each on a scale of **1 to 5**:
 
@@ -103,12 +100,10 @@ Rate the summary on **4 dimensions**, each on a scale of **1 to 5**:
 ---
 
 **Important notes:**
-- Rate each summary independently — do not let your rating of one influence the other.
 - Base your ratings on the transcript provided — do not use outside knowledge.
 - For long transcripts, the summary may cover content beyond what is shown; rate based on what you can verify in the excerpt.
 - There is no single correct answer. Trust your own judgement.
 - If the transcript does not contain enough information to judge a dimension, rate 3 (neutral).
-- The identity of the systems (A = Baseline, B = Our Model) is disclosed so you can give honest comparative feedback.
 
 ---
 
@@ -221,38 +216,16 @@ Barry Hughes: The way I might see it is that, clearly, policing's not devolved, 
 Vikki Howells AM: And who would build that infrastructure, in your opinion?
 ```
 
-**Summary A — Baseline:**
-Barry Hughes, Chief Crown Prosecutor for Wales, discussed the protection of children under the law, including the Children Act 2004's defense of reasonable punishment for assaulting a child. He highlighted the evolving nature of the law and the potential impact of removing the defense of reasonable punishment. Hughes mentioned the divergence of laws between England and Wales, emphasizing the need for updated guidance to reflect these differences. He explained that the police consider the public interest before referring a case to the Crown Prosecution Service for a charging decision. Hughes also discussed the burden and standard of proof in cases involving unlawful assault, emphasizing the importance of the law in protecting children. He anticipates minimal financial impact on the CPS if the legislation passes and expects only a small number of cases related to assault on a child to be prosecuted annually. Additionally, Hughes mentioned that prosecution is not the first option, with out-of-court disposals and diversions available, and highlighted the public interest test in determining whether to prosecute cases involving assaults on children.
-
-[ Linear scale 1–5 ] **Faithfulness — Summary A** (1 = not faithful at all, 5 = completely faithful)
-
-[ Linear scale 1–5 ] **Relevance — Summary A** (1 = does not answer the query, 5 = directly answers the query)
-
-[ Linear scale 1–5 ] **Conciseness — Summary A** (1 = very verbose/repetitive, 5 = tight and focused)
-
-[ Linear scale 1–5 ] **Completeness — Summary A** (1 = misses key points, 5 = covers everything important)
-
----
-
-**Summary B — Our Model:**
+**Summary:**
 Barry Hughes, Chief Crown Prosecutor for Wales, discussed the current law's protection of children, mentioning legislation like the Offences Against the Person Act and the Children Act 2004. He highlighted the evolving nature of the law and suggested that opinions on reasonable punishment are changing. Hughes explained that the police consider evidence and public interest before referring cases to the Crown Prosecution Service, especially if the defense of reasonable chastisement is removed. He emphasized the importance of considering the impact on the child when discussing legal changes and highlighted the increased protection for children under potential legislation affecting the divergence in the law between England and Wales.
 
-[ Linear scale 1–5 ] **Faithfulness — Summary B** (1 = not faithful at all, 5 = completely faithful)
+[ Linear scale 1–5 ] **Faithfulness** (1 = not faithful at all, 5 = completely faithful)
 
-[ Linear scale 1–5 ] **Relevance — Summary B** (1 = does not answer the query, 5 = directly answers the query)
+[ Linear scale 1–5 ] **Relevance** (1 = does not answer the query, 5 = directly answers the query)
 
-[ Linear scale 1–5 ] **Conciseness — Summary B** (1 = very verbose/repetitive, 5 = tight and focused)
+[ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
-[ Linear scale 1–5 ] **Completeness — Summary B** (1 = misses key points, 5 = covers everything important)
-
----
-
-[ Multiple choice ] **Overall, which summary better answers the query?**
-- Summary A is clearly better
-- Summary A is slightly better
-- About the same
-- Summary B is slightly better
-- Summary B is clearly better
+[ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
@@ -367,38 +340,16 @@ Hon. Mona Fortier (Minister of Middle Class Prosperity and Associate Minister of
 The Chair: We will now proceed to Mr. Allison.
 ```
 
-**Summary A — Baseline:**
-Ministers Blair and Sajjan tabled documents, while petitions on various topics were presented by Ms. May, Mr. Genuis, Mr. Cannings, Mr. Johns, and Mr. Manly. Discussions included calls on the government to uphold Indigenous rights, the Truth and Reconciliation Commission's calls to action, and halting the Coastal GasLink project. Community efforts during the COVID-19 pandemic and issues of police brutality against Indigenous peoples were highlighted. The meeting also covered government spending, funding for the Auditor General's office, and a bill to assist Canadians with disabilities, the Canada Emergency Response Benefit, and the wage subsidy. The Prime Minister defended the government's support for the Auditor General's office and assured ongoing support for Canadians during the pandemic.
-
-[ Linear scale 1–5 ] **Faithfulness — Summary A** (1 = not faithful at all, 5 = completely faithful)
-
-[ Linear scale 1–5 ] **Relevance — Summary A** (1 = does not answer the query, 5 = directly answers the query)
-
-[ Linear scale 1–5 ] **Conciseness — Summary A** (1 = very verbose/repetitive, 5 = tight and focused)
-
-[ Linear scale 1–5 ] **Completeness — Summary A** (1 = misses key points, 5 = covers everything important)
-
----
-
-**Summary B — Our Model:**
+**Summary:**
 The meeting of the Special Committee on the COVID-19 Pandemic, chaired by Mrs. Chair, involved tabling of documents by Ministers Blair and Sajjan, presentation of various petitions, and discussions on a range of topics including gas fracking, community efforts during the pandemic, police brutality against Indigenous peoples, and challenges of Internet connectivity in rural areas. Additionally, there were discussions on government spending, COVID-19 impacts, and solidarity with marginalized communities, with concerns raised about the lack of scrutiny on government spending and preparations for a potential second wave of the pandemic. The Leader of the Opposition inquired about additional funding for the Auditor General to examine government expenditures, to which the Prime Minister highlighted previous support and emphasized transparency and openness. Discussions also touched on a bill to assist people with disabilities, enhance the Canada emergency response benefit, and expand the wage subsidy, with the Prime Minister stressing the importance of collaborative efforts
 
-[ Linear scale 1–5 ] **Faithfulness — Summary B** (1 = not faithful at all, 5 = completely faithful)
+[ Linear scale 1–5 ] **Faithfulness** (1 = not faithful at all, 5 = completely faithful)
 
-[ Linear scale 1–5 ] **Relevance — Summary B** (1 = does not answer the query, 5 = directly answers the query)
+[ Linear scale 1–5 ] **Relevance** (1 = does not answer the query, 5 = directly answers the query)
 
-[ Linear scale 1–5 ] **Conciseness — Summary B** (1 = very verbose/repetitive, 5 = tight and focused)
+[ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
-[ Linear scale 1–5 ] **Completeness — Summary B** (1 = misses key points, 5 = covers everything important)
-
----
-
-[ Multiple choice ] **Overall, which summary better answers the query?**
-- Summary A is clearly better
-- Summary A is slightly better
-- About the same
-- Summary B is slightly better
-- Summary B is clearly better
+[ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
@@ -513,38 +464,16 @@ Professor B: Yeah . Yeah . So . Uh , it might even be sooner . Uh , let 's see ,
 PhD A: So , I
 ```
 
-**Summary A — Baseline:**
-Professor B and the team discussed a project submission for ASRU with Dave, focusing on reverberation, signal-to-noise ratio, and differences between systems used. They identified noise sources like air conditioning and a video projector affecting recordings. The meeting also covered adjustments for different feature sets, experiments with insertion penalties and language model weights, NIST evaluations, and different test sets. Discussions included the latency issue with the VAD system, processing steps, and suggestions to reduce latency. The team talked about timing considerations, reducing delays, improving recognition rates, error rate reductions, and the impact of different VAD systems on performance. They also discussed error rate reduction achieved with different VADs, tandem neural networks with MFCC features, and the impact of adding features on recognition results.
-
-[ Linear scale 1–5 ] **Faithfulness — Summary A** (1 = not faithful at all, 5 = completely faithful)
-
-[ Linear scale 1–5 ] **Relevance — Summary A** (1 = does not answer the query, 5 = directly answers the query)
-
-[ Linear scale 1–5 ] **Conciseness — Summary A** (1 = very verbose/repetitive, 5 = tight and focused)
-
-[ Linear scale 1–5 ] **Completeness — Summary A** (1 = misses key points, 5 = covers everything important)
-
----
-
-**Summary B — Our Model:**
+**Summary:**
 Professor B and the team discussed a project submission for ASRU, focusing on reverberation techniques and noise sources affecting signal-to-noise ratios, particularly below 100 Hz. They compared filter differences between the Aurora HTK and SRI systems, noting variations in high-pass frequencies. PhDs shared progress on working with recognizers, modifying features for speech recognition, and addressing latency issues with the VAD system, aiming to reduce latency below two hundred milliseconds. The researchers also discussed using a VAD on clean speech to reduce error rates, experimenting with a tandem neural network and aiming to decrease the number of features to meet a limit of sixty features for improved recognition rates.
 
-[ Linear scale 1–5 ] **Faithfulness — Summary B** (1 = not faithful at all, 5 = completely faithful)
+[ Linear scale 1–5 ] **Faithfulness** (1 = not faithful at all, 5 = completely faithful)
 
-[ Linear scale 1–5 ] **Relevance — Summary B** (1 = does not answer the query, 5 = directly answers the query)
+[ Linear scale 1–5 ] **Relevance** (1 = does not answer the query, 5 = directly answers the query)
 
-[ Linear scale 1–5 ] **Conciseness — Summary B** (1 = very verbose/repetitive, 5 = tight and focused)
+[ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
-[ Linear scale 1–5 ] **Completeness — Summary B** (1 = misses key points, 5 = covers everything important)
-
----
-
-[ Multiple choice ] **Overall, which summary better answers the query?**
-- Summary A is clearly better
-- Summary A is slightly better
-- About the same
-- Summary B is slightly better
-- Summary B is clearly better
+[ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
@@ -659,38 +588,16 @@ Project Manager: No it has to be an animal , so if that's it's {disfmarker} it s
 Marketing: Yeah yeah , but it's an animal it's an animal that lives in the water .
 ```
 
-**Summary A — Baseline:**
-The project manager discussed the design process for a remote control, emphasizing functional, conceptual, and detailed design. The team practiced drawing on a whiteboard. They plan to sell the remote control for 25 Euros to make a profit of 50 million Euros, considering market size, production costs, and design features like usability, size, and battery options. Ideas included a touch screen, rechargeable batteries, and a home station. Marketing suggested selling the home station separately. The team focused on rechargeable batteries, button placement, and user interface, stressing user requirements and market research. They agreed on the need for testing and ensuring functionality and aesthetics. The meeting concluded with plans to reconvene in thirty minutes.
-
-[ Linear scale 1–5 ] **Faithfulness — Summary A** (1 = not faithful at all, 5 = completely faithful)
-
-[ Linear scale 1–5 ] **Relevance — Summary A** (1 = does not answer the query, 5 = directly answers the query)
-
-[ Linear scale 1–5 ] **Conciseness — Summary A** (1 = very verbose/repetitive, 5 = tight and focused)
-
-[ Linear scale 1–5 ] **Completeness — Summary A** (1 = misses key points, 5 = covers everything important)
-
----
-
-**Summary B — Our Model:**
+**Summary:**
 The project manager aims to sell the remote control for about twenty-five Euros and make a profit of fifty million Euros by targeting a big market in Europe. Marketing suggested making the remote control user-friendly for all ages and ensuring durability, with ideas about incorporating a touch screen and offering a home station as a separate option. The team emphasized user needs, functionality, usability, and unique design features like rechargeable batteries and button placement, planning to reconvene in thirty minutes to further develop the design.
 
-[ Linear scale 1–5 ] **Faithfulness — Summary B** (1 = not faithful at all, 5 = completely faithful)
+[ Linear scale 1–5 ] **Faithfulness** (1 = not faithful at all, 5 = completely faithful)
 
-[ Linear scale 1–5 ] **Relevance — Summary B** (1 = does not answer the query, 5 = directly answers the query)
+[ Linear scale 1–5 ] **Relevance** (1 = does not answer the query, 5 = directly answers the query)
 
-[ Linear scale 1–5 ] **Conciseness — Summary B** (1 = very verbose/repetitive, 5 = tight and focused)
+[ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
-[ Linear scale 1–5 ] **Completeness — Summary B** (1 = misses key points, 5 = covers everything important)
-
----
-
-[ Multiple choice ] **Overall, which summary better answers the query?**
-- Summary A is clearly better
-- Summary A is slightly better
-- About the same
-- Summary B is slightly better
-- Summary B is clearly better
+[ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
@@ -733,38 +640,16 @@ Industrial Designer: so one thing uh one remote control should uh control one or
 Project Manager: Okay , and and uh {disfmarker}
 ```
 
-**Summary A — Baseline:**
-When discussing the connection of the remote control and TV, the Industrial Designer suggested focusing on interoperability by proposing a universal remote control for all equipment, considering communication methods like Bluetooth instead of infrared. They also recommended having a display on the remote control to show functions and using white buttons with black marks and black digits for visibility in the dark. The Project Manager confirmed that there is room for a presentation and emphasized the need for a trendy product within cost limitations.
-
-[ Linear scale 1–5 ] **Faithfulness — Summary A** (1 = not faithful at all, 5 = completely faithful)
-
-[ Linear scale 1–5 ] **Relevance — Summary A** (1 = does not answer the query, 5 = directly answers the query)
-
-[ Linear scale 1–5 ] **Conciseness — Summary A** (1 = very verbose/repetitive, 5 = tight and focused)
-
-[ Linear scale 1–5 ] **Completeness — Summary A** (1 = misses key points, 5 = covers everything important)
-
----
-
-**Summary B — Our Model:**
+**Summary:**
 During the discussion on connecting the remote control and TV, the Industrial Designer suggested focusing on interoperability by proposing a universal remote control for all equipment, moving towards Bluetooth technology. They recommended equipping remotes with both infrared and Bluetooth capabilities for cost-effectiveness and modern functionality. Additionally, the Designer proposed incorporating a display on the remote control to show functions, emphasizing visibility in the dark and cost limitations.
 
-[ Linear scale 1–5 ] **Faithfulness — Summary B** (1 = not faithful at all, 5 = completely faithful)
+[ Linear scale 1–5 ] **Faithfulness** (1 = not faithful at all, 5 = completely faithful)
 
-[ Linear scale 1–5 ] **Relevance — Summary B** (1 = does not answer the query, 5 = directly answers the query)
+[ Linear scale 1–5 ] **Relevance** (1 = does not answer the query, 5 = directly answers the query)
 
-[ Linear scale 1–5 ] **Conciseness — Summary B** (1 = very verbose/repetitive, 5 = tight and focused)
+[ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
-[ Linear scale 1–5 ] **Completeness — Summary B** (1 = misses key points, 5 = covers everything important)
-
----
-
-[ Multiple choice ] **Overall, which summary better answers the query?**
-- Summary A is clearly better
-- Summary A is slightly better
-- About the same
-- Summary B is slightly better
-- Summary B is clearly better
+[ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
@@ -817,38 +702,16 @@ User Interface: {vocalsound}
 Industrial Designer: Um basically all this device has to do is send messages to a T_V_ set . And the m most easy way to do this is by uh sending pulses of infrared light to a T_V_ set . Well , I th I tried to uh implement a picture here ,
 ```
 
-**Summary A — Baseline:**
-User Interface preferred the easy-to-use remote control for user-friendliness and trendy user design, suggesting a combination of multi-functionality and ease of use, but without teletext buttons. They mentioned that the volume and zap buttons are the most used on a remote control and suggested focusing on the design of those buttons. User Interface proposed an easy remote control design with fewer buttons for a nice design and user interface. They also suggested having a base station next to the TV for the remote control. User Interface expressed a preference for using a round button instead of a stick on the remote control. They mentioned that they wouldn't personally buy a remote control without the ten digits, but older people might, while younger people might prefer more channels. The possibility of adding speech recognition to the remote control was discussed as a way to make it easier to change channels and find the remote control, although it might be costly.
-
-[ Linear scale 1–5 ] **Faithfulness — Summary A** (1 = not faithful at all, 5 = completely faithful)
-
-[ Linear scale 1–5 ] **Relevance — Summary A** (1 = does not answer the query, 5 = directly answers the query)
-
-[ Linear scale 1–5 ] **Conciseness — Summary A** (1 = very verbose/repetitive, 5 = tight and focused)
-
-[ Linear scale 1–5 ] **Completeness — Summary A** (1 = misses key points, 5 = covers everything important)
-
----
-
-**Summary B — Our Model:**
+**Summary:**
 User Interface preferred the easy-to-use remote control design over the multi-function one due to its user-friendliness and trendy user design, emphasizing the importance of user-friendliness for people under forty years old. They suggested focusing on designing the volume and zap buttons, incorporating a sound signal feature, and having a base station next to the TV for the remote control design. The Industrial Designer highlighted the use of infrared light, energy-efficient components, and the possibility of incorporating fancy lighting techniques like blinking LEDs within cost-effective measures. The discussion also touched on balancing advanced options with user-friendliness in designing the remote control's user interface, including the potential implementation of speech recognition for easier channel changing.
 
-[ Linear scale 1–5 ] **Faithfulness — Summary B** (1 = not faithful at all, 5 = completely faithful)
+[ Linear scale 1–5 ] **Faithfulness** (1 = not faithful at all, 5 = completely faithful)
 
-[ Linear scale 1–5 ] **Relevance — Summary B** (1 = does not answer the query, 5 = directly answers the query)
+[ Linear scale 1–5 ] **Relevance** (1 = does not answer the query, 5 = directly answers the query)
 
-[ Linear scale 1–5 ] **Conciseness — Summary B** (1 = very verbose/repetitive, 5 = tight and focused)
+[ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
-[ Linear scale 1–5 ] **Completeness — Summary B** (1 = misses key points, 5 = covers everything important)
-
----
-
-[ Multiple choice ] **Overall, which summary better answers the query?**
-- Summary A is clearly better
-- Summary A is slightly better
-- About the same
-- Summary B is slightly better
-- Summary B is clearly better
+[ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
@@ -904,38 +767,16 @@ Professor E: And that sort of bypasses the whole {disfmarker} the whole Jimbox t
 Grad C: Right .
 ```
 
-**Summary A — Baseline:**
-Discussions on equipment included the need for audio monitoring due to spikes in recordings, potential issues with wired microphones causing spikes, and plans to evaluate new microphones. They discussed wireless microphones, base stations, and headsets, aiming to replace wired microphones with wireless ones by purchasing another base station and more wireless microphones. The cost includes $900 for the base station and $800 per channel. The quality of Sony radio mics was praised. They plan to keep everyone on the same page regarding equipment purchases and will use professional help for changing connectors on headsets. The equipment also involved transcribing tools and data cleaning processes, ensuring clean, spell-checked data marked up consistently. They are incorporating additional conventions requested by Liz, such as handling numbers and acronyms systematically. Discussions also touched on a recognizer with problems handling long speech chunks, using loudness-based features, and normalizing energy across channels. Additionally, equipment discussions included the distribution of transcripts through a web interface, providing passwords for access, and preferences for online transcript access over print. There was a debate about navigating transcripts online versus on paper and the idea of providing search mechanisms for electronic documents.
-
-[ Linear scale 1–5 ] **Faithfulness — Summary A** (1 = not faithful at all, 5 = completely faithful)
-
-[ Linear scale 1–5 ] **Relevance — Summary A** (1 = does not answer the query, 5 = directly answers the query)
-
-[ Linear scale 1–5 ] **Conciseness — Summary A** (1 = very verbose/repetitive, 5 = tight and focused)
-
-[ Linear scale 1–5 ] **Completeness — Summary A** (1 = misses key points, 5 = covers everything important)
-
----
-
-**Summary B — Our Model:**
+**Summary:**
 The discussion about the equipment involved considerations for purchasing more comfortable headsets, adding another wireless setup, and replacing wired mics with wireless ones. The cost included a base station at nine hundred dollars and eight hundred dollars per channel. Postdoc F focused on ensuring clean, spell-checked data, incorporating additional conventions requested by Liz, and implementing explicit markers for different types of comments. They also discussed the importance of clean data for further processing and mentioned a breakthrough in speech-nonspeech segmentation. The equipment mentioned included tools for spell-checking, data cleaning, and incorporating specific conventions for transcription processing, as well as a recognizer that had problems with long chunks of speech, leading to memory issues. Privacy concerns were addressed by assigning each participant a single password for access control when providing transcripts for meetings.
 
-[ Linear scale 1–5 ] **Faithfulness — Summary B** (1 = not faithful at all, 5 = completely faithful)
+[ Linear scale 1–5 ] **Faithfulness** (1 = not faithful at all, 5 = completely faithful)
 
-[ Linear scale 1–5 ] **Relevance — Summary B** (1 = does not answer the query, 5 = directly answers the query)
+[ Linear scale 1–5 ] **Relevance** (1 = does not answer the query, 5 = directly answers the query)
 
-[ Linear scale 1–5 ] **Conciseness — Summary B** (1 = very verbose/repetitive, 5 = tight and focused)
+[ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
-[ Linear scale 1–5 ] **Completeness — Summary B** (1 = misses key points, 5 = covers everything important)
-
----
-
-[ Multiple choice ] **Overall, which summary better answers the query?**
-- Summary A is clearly better
-- Summary A is slightly better
-- About the same
-- Summary B is slightly better
-- Summary B is clearly better
+[ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
@@ -983,38 +824,16 @@ Professor E: Probably we shouldn't {disfmarker} probably we shouldn't talk about
 Grad C: Right .
 ```
 
-**Summary A — Baseline:**
-The team discussed changing recording conventions by crossing out R-nine and writing MR eleven, marking comments as unread, addressing audio monitoring issues, and incorporating additional conventions requested by Liz. They planned to replace wired mics with wireless ones, mentioned the cost involved, and the positive experience with Sony radio mics. They also discussed using numbers, acronyms, and markers like "VOC," "NONVOC," and "GLOSS" to categorize comments, handling numbers and acronyms manually, and using a filter for other tasks. Additionally, they talked about providing transcripts to participants for editing, generating web pages with transcripts for exclusion of unwanted sections, and considering simpler methods like providing paper transcripts. The team also discussed different preferences regarding recording conventions, using a single password for each person, distributing transcripts via web pages, providing printouts for those who prefer them, and considering email approval instead of signatures.
-
-[ Linear scale 1–5 ] **Faithfulness — Summary A** (1 = not faithful at all, 5 = completely faithful)
-
-[ Linear scale 1–5 ] **Relevance — Summary A** (1 = does not answer the query, 5 = directly answers the query)
-
-[ Linear scale 1–5 ] **Conciseness — Summary A** (1 = very verbose/repetitive, 5 = tight and focused)
-
-[ Linear scale 1–5 ] **Completeness — Summary A** (1 = misses key points, 5 = covers everything important)
-
----
-
-**Summary B — Our Model:**
+**Summary:**
 The team discussed various recording conventions, such as changing session dates, marking comments as unread, and addressing audio monitoring and microphone equipment issues. They planned to evaluate new microphones, purchase more comfortable headsets, and acquire additional wireless setups, including replacing wired mics with wireless ones. Additionally, they talked about incorporating new conventions for transcriptions, like systematic handling of numbers and acronyms, explicit markers for different comment types, and strategies for identifying inconsistencies. The team also developed tools for generating web pages with transcriptions for participants to edit, using a single password for privacy and restricting access to meeting participants.
 
-[ Linear scale 1–5 ] **Faithfulness — Summary B** (1 = not faithful at all, 5 = completely faithful)
+[ Linear scale 1–5 ] **Faithfulness** (1 = not faithful at all, 5 = completely faithful)
 
-[ Linear scale 1–5 ] **Relevance — Summary B** (1 = does not answer the query, 5 = directly answers the query)
+[ Linear scale 1–5 ] **Relevance** (1 = does not answer the query, 5 = directly answers the query)
 
-[ Linear scale 1–5 ] **Conciseness — Summary B** (1 = very verbose/repetitive, 5 = tight and focused)
+[ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
-[ Linear scale 1–5 ] **Completeness — Summary B** (1 = misses key points, 5 = covers everything important)
-
----
-
-[ Multiple choice ] **Overall, which summary better answers the query?**
-- Summary A is clearly better
-- Summary A is slightly better
-- About the same
-- Summary B is slightly better
-- Summary B is clearly better
+[ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
@@ -1062,38 +881,16 @@ Grad A: Uh - huh .
 Grad D: Mm - hmm . But what 's the data about like , are we able to get these nodes from the data ?
 ```
 
-**Summary A — Baseline:**
-Grad D discussed the mixture of experts, mentioning the propagation of beliefs when updated and the adjustment for one mode thing. They also talked about having all factors pointing to a summary thing and splitting up the mixture of experts to aid in probability computation. Professor B suggested creating an intermediate node for the endpoint decision based on user models and mentioned the user interest as a vector of five hundred values.
-
-[ Linear scale 1–5 ] **Faithfulness — Summary A** (1 = not faithful at all, 5 = completely faithful)
-
-[ Linear scale 1–5 ] **Relevance — Summary A** (1 = does not answer the query, 5 = directly answers the query)
-
-[ Linear scale 1–5 ] **Conciseness — Summary A** (1 = very verbose/repetitive, 5 = tight and focused)
-
-[ Linear scale 1–5 ] **Completeness — Summary A** (1 = misses key points, 5 = covers everything important)
-
----
-
-**Summary B — Our Model:**
+**Summary:**
 When discussing probability computation, Grad D considered whether to have all values for "Go-there" or make it binary, based on when the decision is made. The professor and Grad D discussed the possibility of a lazy mode for updating beliefs in the mixture of experts model, referencing Srini's work on proper inferences. They also talked about adjusting the pictogram mode to influence decisions and arranging the belief-net to fill in ontology item properties. The conversation highlighted the importance of user interest vectors, creating nodes to measure match with the entity, and structuring user models to encapsulate factors like time, money, and energy efficiently.
 
-[ Linear scale 1–5 ] **Faithfulness — Summary B** (1 = not faithful at all, 5 = completely faithful)
+[ Linear scale 1–5 ] **Faithfulness** (1 = not faithful at all, 5 = completely faithful)
 
-[ Linear scale 1–5 ] **Relevance — Summary B** (1 = does not answer the query, 5 = directly answers the query)
+[ Linear scale 1–5 ] **Relevance** (1 = does not answer the query, 5 = directly answers the query)
 
-[ Linear scale 1–5 ] **Conciseness — Summary B** (1 = very verbose/repetitive, 5 = tight and focused)
+[ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
-[ Linear scale 1–5 ] **Completeness — Summary B** (1 = misses key points, 5 = covers everything important)
-
----
-
-[ Multiple choice ] **Overall, which summary better answers the query?**
-- Summary A is clearly better
-- Summary A is slightly better
-- About the same
-- Summary B is slightly better
-- Summary B is clearly better
+[ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
@@ -1208,38 +1005,16 @@ PhD D: Yeah .
 Professor B: I just wasn't saying it very well , I guess .
 ```
 
-**Summary A — Baseline:**
-The meeting discussed training neural networks on task data and broad data in English and Italian, noting that training on task data worked well but using broad data led to decreased performance. Different testing scenarios were explored, including training on one language and testing on another, showing a decrease in accuracy with multilingual data. Training on multilingual broad data resulted in error rates around 1.1 for the same language and 1.3 for three languages, with little difference when excluding English. Variability in the training set and language conditions impacted performance. Testing on TI-digits showed a 30% error rate reduction, with worse performance without using delta and no improvement when adding English. The PhD students discussed differences in error rates between training on Italian and Spanish data, noise variations, and issues with online normalization and alpha values. Changes were made to the initialization of recursion in the code to align with the OGI baseline, with proposed improvements in neural network outputs and consideration of context for better scores.
-
-[ Linear scale 1–5 ] **Faithfulness — Summary A** (1 = not faithful at all, 5 = completely faithful)
-
-[ Linear scale 1–5 ] **Relevance — Summary A** (1 = does not answer the query, 5 = directly answers the query)
-
-[ Linear scale 1–5 ] **Conciseness — Summary A** (1 = very verbose/repetitive, 5 = tight and focused)
-
-[ Linear scale 1–5 ] **Completeness — Summary A** (1 = misses key points, 5 = covers everything important)
-
----
-
-**Summary B — Our Model:**
+**Summary:**
 The meeting focused on training neural networks with different types of data, including PLP, JRASTA, MSG, and MFCC, on English, Italian, and multilingual databases. Results indicated that training on task data was effective, but performance decreased with broad multilingual data, showing an error rate increase of around ten to thirty percent. The impact of multilingual data on error rates was discussed, with improvements seen when training on broad English data, and the presence of English did not significantly affect performance. PhD D highlighted issues with online normalization methods and differences in alpha values, as well as differences in initialization methods for the recursion process.
 
-[ Linear scale 1–5 ] **Faithfulness — Summary B** (1 = not faithful at all, 5 = completely faithful)
+[ Linear scale 1–5 ] **Faithfulness** (1 = not faithful at all, 5 = completely faithful)
 
-[ Linear scale 1–5 ] **Relevance — Summary B** (1 = does not answer the query, 5 = directly answers the query)
+[ Linear scale 1–5 ] **Relevance** (1 = does not answer the query, 5 = directly answers the query)
 
-[ Linear scale 1–5 ] **Conciseness — Summary B** (1 = very verbose/repetitive, 5 = tight and focused)
+[ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
-[ Linear scale 1–5 ] **Completeness — Summary B** (1 = misses key points, 5 = covers everything important)
-
----
-
-[ Multiple choice ] **Overall, which summary better answers the query?**
-- Summary A is clearly better
-- Summary A is slightly better
-- About the same
-- Summary B is slightly better
-- Summary B is clearly better
+[ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
