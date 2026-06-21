@@ -19,6 +19,12 @@ __pycache__/
 # OS-generated files
 .DS_Store
 
+# cache
+/cache_qmsum/
+
+# evaluation results
+eval/results/
+
 # Docker
 Dockerfile
 requirements.txt

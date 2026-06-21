@@ -47,7 +47,7 @@ For each example you will see:
 - **Meeting transcript** — an excerpt (or full transcript) from the meeting
 - **Summary** — a model-generated summary that tries to answer the query
 
-Rate the summary on **4 dimensions**, each on a scale of **1 to 5**:
+Rate the summary on **6 dimensions**, each on a scale of **1 to 5**:
 
 ---
 
@@ -96,6 +96,30 @@ Rate the summary on **4 dimensions**, each on a scale of **1 to 5**:
 | 3 | Covers the main point but misses important details |
 | 4 | Covers most key points |
 | 5 | Covers all key points thoroughly |
+
+---
+
+**Utility / Actionability** — Is the summary useful and actionable for someone who needs to act on the meeting?
+
+| Score | Meaning |
+|-------|---------|
+| 1 | Not useful or actionable at all |
+| 2 | Slightly useful but hard to act on |
+| 3 | Moderately useful, some actionable content |
+| 4 | Mostly useful and actionable |
+| 5 | Extremely useful and directly actionable |
+
+---
+
+**Cognitive Load Reduction** — Does the summary save mental effort compared to reading the full transcript?
+
+| Score | Meaning |
+|-------|---------|
+| 1 | No effort saved — as hard to process as the transcript |
+| 2 | Slightly reduces effort |
+| 3 | Moderately reduces mental effort |
+| 4 | Noticeably reduces mental effort |
+| 5 | Drastically reduces mental effort |
 
 ---
 
@@ -227,6 +251,10 @@ Barry Hughes, Chief Crown Prosecutor for Wales, discussed the current law's prot
 
 [ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
+[ Linear scale 1–5 ] **Utility / Actionability** (1 = not useful/actionable, 5 = extremely useful/actionable)
+
+[ Linear scale 1–5 ] **Cognitive Load Reduction** (1 = no effort saved, 5 = drastically reduces mental effort)
+
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
 ---
@@ -350,6 +378,10 @@ The meeting of the Special Committee on the COVID-19 Pandemic, chaired by Mrs. C
 [ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
 [ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
+
+[ Linear scale 1–5 ] **Utility / Actionability** (1 = not useful/actionable, 5 = extremely useful/actionable)
+
+[ Linear scale 1–5 ] **Cognitive Load Reduction** (1 = no effort saved, 5 = drastically reduces mental effort)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
@@ -475,6 +507,10 @@ Professor B and the team discussed a project submission for ASRU, focusing on re
 
 [ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
+[ Linear scale 1–5 ] **Utility / Actionability** (1 = not useful/actionable, 5 = extremely useful/actionable)
+
+[ Linear scale 1–5 ] **Cognitive Load Reduction** (1 = no effort saved, 5 = drastically reduces mental effort)
+
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
 ---
@@ -599,6 +635,10 @@ The project manager aims to sell the remote control for about twenty-five Euros 
 
 [ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
+[ Linear scale 1–5 ] **Utility / Actionability** (1 = not useful/actionable, 5 = extremely useful/actionable)
+
+[ Linear scale 1–5 ] **Cognitive Load Reduction** (1 = no effort saved, 5 = drastically reduces mental effort)
+
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
 ---
@@ -650,6 +690,10 @@ During the discussion on connecting the remote control and TV, the Industrial De
 [ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
 [ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
+
+[ Linear scale 1–5 ] **Utility / Actionability** (1 = not useful/actionable, 5 = extremely useful/actionable)
+
+[ Linear scale 1–5 ] **Cognitive Load Reduction** (1 = no effort saved, 5 = drastically reduces mental effort)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
@@ -712,6 +756,10 @@ User Interface preferred the easy-to-use remote control design over the multi-fu
 [ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
 [ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
+
+[ Linear scale 1–5 ] **Utility / Actionability** (1 = not useful/actionable, 5 = extremely useful/actionable)
+
+[ Linear scale 1–5 ] **Cognitive Load Reduction** (1 = no effort saved, 5 = drastically reduces mental effort)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
@@ -778,6 +826,10 @@ The discussion about the equipment involved considerations for purchasing more c
 
 [ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
+[ Linear scale 1–5 ] **Utility / Actionability** (1 = not useful/actionable, 5 = extremely useful/actionable)
+
+[ Linear scale 1–5 ] **Cognitive Load Reduction** (1 = no effort saved, 5 = drastically reduces mental effort)
+
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
 ---
@@ -835,6 +887,10 @@ The team discussed various recording conventions, such as changing session dates
 
 [ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
 
+[ Linear scale 1–5 ] **Utility / Actionability** (1 = not useful/actionable, 5 = extremely useful/actionable)
+
+[ Linear scale 1–5 ] **Cognitive Load Reduction** (1 = no effort saved, 5 = drastically reduces mental effort)
+
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
 ---
@@ -891,6 +947,10 @@ When discussing probability computation, Grad D considered whether to have all v
 [ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
 [ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
+
+[ Linear scale 1–5 ] **Utility / Actionability** (1 = not useful/actionable, 5 = extremely useful/actionable)
+
+[ Linear scale 1–5 ] **Cognitive Load Reduction** (1 = no effort saved, 5 = drastically reduces mental effort)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
@@ -1015,6 +1075,10 @@ The meeting focused on training neural networks with different types of data, in
 [ Linear scale 1–5 ] **Conciseness** (1 = very verbose/repetitive, 5 = tight and focused)
 
 [ Linear scale 1–5 ] **Completeness** (1 = misses key points, 5 = covers everything important)
+
+[ Linear scale 1–5 ] **Utility / Actionability** (1 = not useful/actionable, 5 = extremely useful/actionable)
+
+[ Linear scale 1–5 ] **Cognitive Load Reduction** (1 = no effort saved, 5 = drastically reduces mental effort)
 
 [ Paragraph ] Notes (optional — anything unusual about this example?)
 
