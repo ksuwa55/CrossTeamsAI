@@ -56,7 +56,7 @@ def iter_qmsum(split_dir: str):
         meeting_id = js.get("meeting_id") or os.path.splitext(os.path.basename(fp))[0]
         transcript = _concat_transcript(js)
         for qid, query, ref in _extract_queries(js):
-            input_text = f"Summarize the meeting in response to this query: '{query}'\n\n{transcript}"
+            input_text = f"Summarize the meeting in response to this query: '{query}' Write 2–4 sentences, around 60–80 words.\n\n{transcript}"
             yield {
                 "meeting_id": meeting_id,
                 "query_id": qid,

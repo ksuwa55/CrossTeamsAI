@@ -1,10 +1,11 @@
 import json
 import re
 import os
+import time
 import hashlib
 from datetime import datetime
 from typing import List, Dict, Optional
-from openai import OpenAI
+from openai import OpenAI, RateLimitError
 from dotenv import load_dotenv
 
 
@@ -61,25 +62,26 @@ class MeetingSummarizer:
             for msg in transcript
         )
 
+        length_hint = "Write 2–4 sentences, around 60–80 words.\n"
         if mode == "decision":
-            instruction = "Summarize key decisions made in the meeting.\n\n"
+            instruction = f"Summarize key decisions made in the meeting. {length_hint}\n"
         elif mode == "blocker":
-            instruction = "Summarize any issues or blockers raised by participants.\n\n"
+            instruction = f"Summarize any issues or blockers raised by participants. {length_hint}\n"
         elif mode == "query" and query:
-            instruction = f"Summarize the meeting in response to this query: '{query}'\n\n"
+            instruction = f"Summarize the meeting in response to this query: '{query}' {length_hint}\n"
         else:
-            instruction = "Summarize this meeting. Include key points and action items.\n\n"
+            instruction = f"Summarize this meeting. Include key points and action items. {length_hint}\n"
 
         return instruction + dialogue
 
     # ----------------------------
     # Caching helpers
     # ----------------------------
-    def get_cache_path(self, prompt: str, model: str = "gpt-3.5-turbo", system_prompt: str = "") -> str:
+    def get_cache_path(self, prompt: str, model: str = "gpt-3.5-turbo", system_prompt: str = "", temperature: float = 0.0) -> str:
         """
-        Include system_prompt in the key so different behaviors don't collide in cache.
+        Include system_prompt and temperature in the key so different behaviors don't collide in cache.
         """
-        key = hashlib.md5((model + (system_prompt or "") + prompt).encode("utf-8")).hexdigest()
+        key = hashlib.md5((model + (system_prompt or "") + f"t={temperature}" + prompt).encode("utf-8")).hexdigest()
         return os.path.join(self.cache_dir, f"{key}.json")
 
     # ----------------------------
@@ -91,7 +93,7 @@ class MeetingSummarizer:
         model: str = "gpt-3.5-turbo",
         system_prompt: Optional[str] = None,
         temperature: float = 0.2,
-        max_tokens: int = 220,
+        max_tokens: int = 150,
     ) -> str:
         """
         Chat completion with:
@@ -100,7 +102,7 @@ class MeetingSummarizer:
           - modest max_tokens to reduce drift and cost
         Backward compatible: if system_prompt is None, behavior matches older calls.
         """
-        cache_path = self.get_cache_path(prompt, model=model, system_prompt=(system_prompt or ""))
+        cache_path = self.get_cache_path(prompt, model=model, system_prompt=(system_prompt or ""), temperature=temperature)
         if os.path.exists(cache_path):
             with open(cache_path, "r", encoding="utf-8") as f:
                 return json.load(f)["response"]
@@ -110,12 +112,22 @@ class MeetingSummarizer:
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt})
 
-        response = self.client.chat.completions.create(
-            model=model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
+        wait = 5
+        for attempt in range(6):
+            try:
+                response = self.client.chat.completions.create(
+                    model=model,
+                    messages=messages,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                )
+                break
+            except RateLimitError:
+                if attempt == 5:
+                    raise
+                print(f"[rate limit] waiting {wait}s (attempt {attempt + 1}/6)...")
+                time.sleep(wait)
+                wait = min(wait * 2, 60)
         output = response.choices[0].message.content
 
         with open(cache_path, "w", encoding="utf-8") as f:
