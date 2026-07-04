@@ -1,0 +1,12 @@
+[
+  {
+    "cause": "Requirement for the payments API was ambiguous",
+    "effect": "Integration with billing service delayed",
+    "timestamp": "2026-01-19T11:05:00"
+  },
+  {
+    "cause": "Integration with billing service delayed",
+    "effect": "Team missed the sprint deadline",
+    "timestamp": "2026-01-19T11:20:00"
+  }
+]
