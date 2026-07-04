@@ -5,6 +5,7 @@ import gradio as gr
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import networkx as nx
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.abspath(os.path.join(HERE, ".."))
@@ -30,9 +31,32 @@ _cause_options = [n for n in _graph.nodes() if _graph.out_degree(n) > 0]
 _outcome_options = [n for n in _graph.nodes() if _graph.in_degree(n) > 0]
 
 
+def _format_path_evidence(graph: nx.DiGraph, path, max_examples_per_edge: int = 2) -> str:
+    """Real transcript excerpts behind each hop of cause -> outcome, so a
+    non-technical PM can see *why* the DAG claims this link without reading
+    code or JSON."""
+    sections = []
+    for u, v in zip(path[:-1], path[1:]):
+        edge = graph[u][v]
+        examples = sorted(edge["evidence"], key=lambda e: e.get("timestamp", ""))[:max_examples_per_edge]
+        quotes = "\n".join(
+            f'- _{ex.get("meeting_id", "unknown meeting")} ({ex.get("timestamp", "n/a")})_: '
+            f'"{ex["cause"]}" → "{ex["effect"]}"'
+            for ex in examples
+        )
+        sections.append(f"**{u} → {v}** (seen {edge['weight']}x)\n{quotes}")
+    return "\n\n".join(sections)
+
+
 def run_simulation(cause: str, outcome: str, mitigate: bool, num_samples: int):
     if cause == outcome:
-        return "Cause and outcome must be different nodes.", None
+        return "Cause and outcome must be different nodes.", None, ""
+
+    if not nx.has_path(_graph, cause, outcome):
+        return f"No causal path from '{cause}' to '{outcome}' in the current DAG.", None, ""
+
+    path = nx.shortest_path(_graph, cause, outcome)
+    evidence_md = _format_path_evidence(_graph, path)
 
     result = simulate_intervention(_scm, cause_node=cause, outcome_node=outcome, num_samples=int(num_samples))
     current_prob = result["intervened_probability"] if mitigate else result["baseline_probability"]
@@ -58,7 +82,7 @@ def run_simulation(cause: str, outcome: str, mitigate: bool, num_samples: int):
         f"Predicted reduction:                      {result['absolute_reduction']:.2f} "
         f"({result['relative_reduction_pct']:.0f}% relative)"
     )
-    return summary, fig
+    return summary, fig, evidence_md
 
 
 with gr.Blocks(title="Causal Intervention Simulator") as demo:
@@ -77,8 +101,9 @@ with gr.Blocks(title="Causal Intervention Simulator") as demo:
 
     out_text = gr.Textbox(label="Result", lines=6)
     out_plot = gr.Plot(label="Probability shift")
+    out_evidence = gr.Markdown(label="Why (evidence from transcripts)")
 
-    run_btn.click(run_simulation, inputs=[cause, outcome, mitigate, num_samples], outputs=[out_text, out_plot])
+    run_btn.click(run_simulation, inputs=[cause, outcome, mitigate, num_samples], outputs=[out_text, out_plot, out_evidence])
 
 if __name__ == "__main__":
     demo.launch(server_name="0.0.0.0", server_port=7861, share=False)
