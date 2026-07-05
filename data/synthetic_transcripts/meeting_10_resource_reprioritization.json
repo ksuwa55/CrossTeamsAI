@@ -1,0 +1,12 @@
+[
+  {"speaker": "Nadia - Host", "timestamp": "00:00:00", "text": "Before we start, just a heads up, Carlos is out sick for the rest of the week."},
+  {"speaker": "Felix - Engineer", "timestamp": "00:00:20", "text": "That's a problem, he's the only one who really understands the notifications service he's been building."},
+  {"speaker": "Ravi - Engineer", "timestamp": "00:00:40", "text": "Without him, I don't think we can finish the notifications feature in time for the demo on Friday."},
+  {"speaker": "Nadia - Host", "timestamp": "00:01:00", "text": "Is there any documentation we can use to pick up where he left off?"},
+  {"speaker": "Felix - Engineer", "timestamp": "00:01:20", "text": "Barely any, he was moving fast and most of the logic is just in his head, which is exactly the problem."},
+  {"speaker": "Ravi - Engineer", "timestamp": "00:01:40", "text": "Given the resource gap, I think we need to accept the notifications feature will miss Friday's deadline."},
+  {"speaker": "Nadia - Host", "timestamp": "00:02:00", "text": "Let's make sure we decide now rather than waiting until Thursday to admit it."},
+  {"speaker": "Felix - Engineer", "timestamp": "00:02:20", "text": "Agreed. We should reprioritize and demo the dashboard improvements instead, that part is fully done."},
+  {"speaker": "Nadia - Host", "timestamp": "00:02:40", "text": "Good idea. Let's make sure we ask Carlos to document his work as soon as he's back, so we're not in this position again."},
+  {"speaker": "Ravi - Engineer", "timestamp": "00:03:00", "text": "Yes, please, this has happened before when he was on leave last quarter too."}
+]

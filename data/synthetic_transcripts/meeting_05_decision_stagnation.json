@@ -1,0 +1,12 @@
+[
+  {"speaker": "Elena - Host", "timestamp": "00:00:00", "text": "We need to finalize which database we're using for the analytics service. This has been open for three weeks now."},
+  {"speaker": "Raj - Engineer", "timestamp": "00:00:20", "text": "I still think Postgres is the safer choice, but the Tokyo team prefers a managed NoSQL option."},
+  {"speaker": "Kenji - Engineer", "timestamp": "00:00:40", "text": "We raised concerns about Postgres scaling for our expected write volume. No one has really addressed that yet."},
+  {"speaker": "Elena - Host", "timestamp": "00:01:00", "text": "So we still don't have consensus. Can we get a decision today, please?"},
+  {"speaker": "Raj - Engineer", "timestamp": "00:01:20", "text": "I don't think we can decide without a proper load test. That would take another week at least."},
+  {"speaker": "Kenji - Engineer", "timestamp": "00:01:40", "text": "We've been going back and forth without deciding for so long that the undecided architecture is now blocking the whole analytics roadmap."},
+  {"speaker": "Elena - Host", "timestamp": "00:02:00", "text": "This indecision is going to cost us the deadline for the analytics MVP next month."},
+  {"speaker": "Raj - Engineer", "timestamp": "00:02:20", "text": "Agreed. Let's just timebox the load test to three days and commit to a final decision after that, no more delays."},
+  {"speaker": "Kenji - Engineer", "timestamp": "00:02:40", "text": "Fine by me. If we don't decide by Friday, we'll definitely miss the MVP deadline."},
+  {"speaker": "Elena - Host", "timestamp": "00:03:00", "text": "Agreed, let's lock that in as our final checkpoint."}
+]

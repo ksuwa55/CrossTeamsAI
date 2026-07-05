@@ -1,0 +1,11 @@
+[
+  {"speaker": "Marco - PM", "timestamp": "00:00:00", "text": "Let's start with the shipping partner integration. Where are we at?"},
+  {"speaker": "Yuki - Engineer", "timestamp": "00:00:20", "text": "We're still waiting on the sandbox API credentials from the shipping vendor. They said it would take 48 hours, that was five days ago."},
+  {"speaker": "Marco - PM", "timestamp": "00:00:40", "text": "That's frustrating. Have we tried escalating through their support channel?"},
+  {"speaker": "Yuki - Engineer", "timestamp": "00:01:00", "text": "Twice. No response yet. We're basically blocked on their side, there's nothing more we can do from here."},
+  {"speaker": "Leo - Engineer", "timestamp": "00:01:20", "text": "Because of this, the whole integration testing phase is delayed. We can't even simulate an order without live API access."},
+  {"speaker": "Marco - PM", "timestamp": "00:01:40", "text": "Let's mock the API response for now so we're not fully stuck, and swap it once the real credentials arrive."},
+  {"speaker": "Yuki - Engineer", "timestamp": "00:02:00", "text": "That could work for unit tests, but the end-to-end integration delay is still real. We can't fully validate until we have the real thing."},
+  {"speaker": "Leo - Engineer", "timestamp": "00:02:20", "text": "If this drags on another week, the integration delay will push into next sprint's launch window."},
+  {"speaker": "Marco - PM", "timestamp": "00:02:40", "text": "Understood. I'll escalate this to their account manager directly today."}
+]

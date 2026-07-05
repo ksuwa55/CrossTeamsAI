@@ -1,0 +1,11 @@
+[
+  {"speaker": "Grace - Host", "timestamp": "00:00:00", "text": "Release is scheduled for Thursday. Where do we stand on testing?"},
+  {"speaker": "Omar - QA", "timestamp": "00:00:20", "text": "Not good. We still have a backlog of about fifteen test cases that haven't been run yet."},
+  {"speaker": "Ines - Engineer", "timestamp": "00:00:40", "text": "Fifteen? I thought QA was almost done last week."},
+  {"speaker": "Omar - QA", "timestamp": "00:01:00", "text": "New features kept coming in faster than we could test them. The QA backlog just kept growing."},
+  {"speaker": "Grace - Host", "timestamp": "00:01:20", "text": "So realistically, can we still hit Thursday?"},
+  {"speaker": "Omar - QA", "timestamp": "00:01:40", "text": "Honestly, no. At this pace we'll miss the deadline unless we either delay the release or freeze new features immediately."},
+  {"speaker": "Ines - Engineer", "timestamp": "00:02:00", "text": "I think we should freeze feature work now and let QA catch up, better than shipping something broken."},
+  {"speaker": "Grace - Host", "timestamp": "00:02:20", "text": "Agreed. Let's freeze new merges as of today so the testing delay doesn't push the launch even further out."},
+  {"speaker": "Omar - QA", "timestamp": "00:02:40", "text": "That helps. If we freeze now, I think we can clear the backlog by Wednesday and still make Thursday, just barely."}
+]

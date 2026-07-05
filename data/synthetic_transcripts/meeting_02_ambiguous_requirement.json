@@ -1,0 +1,12 @@
+[
+  {"speaker": "Sofia - PM", "timestamp": "00:00:00", "text": "Let's talk about the checkout flow. I know there's been some confusion about what 'guest checkout' actually means in the spec."},
+  {"speaker": "Tomas - Engineer", "timestamp": "00:00:20", "text": "Yeah, the requirement is really unclear. Does guest checkout still require an email, or is it fully anonymous?"},
+  {"speaker": "Sofia - PM", "timestamp": "00:00:40", "text": "Honestly, I think the client meant email is optional but we need it for order confirmation. But it wasn't written down clearly."},
+  {"speaker": "Mei - Engineer", "timestamp": "00:01:00", "text": "We built it assuming email was mandatory. If that changes now, that's a scope change on our side, not a small tweak."},
+  {"speaker": "Tomas - Engineer", "timestamp": "00:01:20", "text": "This is the third time a requirement has been reinterpreted mid-sprint. It keeps pushing our estimates off."},
+  {"speaker": "Sofia - PM", "timestamp": "00:01:40", "text": "I understand the frustration. Let's please get written confirmation from the client this time before we touch any code."},
+  {"speaker": "Mei - Engineer", "timestamp": "00:02:00", "text": "Because of this ambiguity, we've already lost about three days of work re-doing the form validation logic."},
+  {"speaker": "Tomas - Engineer", "timestamp": "00:02:20", "text": "At this rate we're going to miss the Friday deadline for the checkout release."},
+  {"speaker": "Sofia - PM", "timestamp": "00:02:40", "text": "Let's flag that risk now. I'll tell the client the deadline is likely to slip if the scope keeps shifting."},
+  {"speaker": "Mei - Engineer", "timestamp": "00:03:00", "text": "Please make sure the next spec update is unambiguous, otherwise we'll be redoing this again next week."}
+]
