@@ -1,0 +1,17 @@
+[
+  {
+    "cause": "the requirement is really unclear",
+    "effect": "there's been confusion about what 'guest checkout' actually means in the spec",
+    "timestamp": "00:00:00"
+  },
+  {
+    "cause": "this is the third time a requirement has been reinterpreted mid-sprint",
+    "effect": "about three days of work have been lost re-doing the form validation logic",
+    "timestamp": "00:02:00"
+  },
+  {
+    "cause": "about three days of work have been lost re-doing the form validation logic",
+    "effect": "the team is going to miss the Friday deadline for the checkout release",
+    "timestamp": "00:02:20"
+  }
+]

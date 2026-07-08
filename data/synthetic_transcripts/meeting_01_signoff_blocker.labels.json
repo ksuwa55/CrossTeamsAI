@@ -1,0 +1,17 @@
+[
+  {
+    "cause": "legal sign-off on the data-sharing agreement with Berlin is pending",
+    "effect": "the customer records module cannot be pushed",
+    "timestamp": "00:00:45"
+  },
+  {
+    "cause": "the customer records module cannot be pushed",
+    "effect": "QA is holding off on writing test cases for that module",
+    "timestamp": "00:01:10"
+  },
+  {
+    "cause": "legal sign-off on the data-sharing agreement with Berlin is pending",
+    "effect": "the whole integration timeline with the Berlin team is basically stalled",
+    "timestamp": "00:02:50"
+  }
+]

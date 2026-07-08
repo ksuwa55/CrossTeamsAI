@@ -1,0 +1,12 @@
+[
+  {
+    "cause": "by the time Sam got to the review, the Osaka team had already logged off so he couldn't clarify a question he had",
+    "effect": "the Osaka team's branch cannot be merged because it's waiting on a code review from London",
+    "timestamp": "00:00:20"
+  },
+  {
+    "cause": "the twelve hour timezone gap between London and Osaka",
+    "effect": "the team is blocked waiting on replies, costing almost a full day each time",
+    "timestamp": "00:01:20"
+  }
+]
