@@ -1,0 +1,12 @@
+[
+  {"speaker": "Hana - Host", "timestamp": "00:00:00", "text": "Quick standup today. Priya, how's testing going on the payments module?"},
+  {"speaker": "Priya - QA", "timestamp": "00:00:15", "text": "Not great honestly. I'm the only QA person on this project right now, and there are three modules waiting for testing."},
+  {"speaker": "Diego - Engineer", "timestamp": "00:00:35", "text": "We finished the payments module two days ago but it's just sitting there because QA is backed up."},
+  {"speaker": "Priya - QA", "timestamp": "00:00:55", "text": "I raised this last sprint too, we're understaffed on QA. It's not sustainable for one person to cover this much."},
+  {"speaker": "Hana - Host", "timestamp": "00:01:15", "text": "Do we have budget to bring in a contractor QA for a few weeks?"},
+  {"speaker": "Diego - Engineer", "timestamp": "00:01:35", "text": "That would help a lot. Right now the testing backlog is basically blocking every release we want to do."},
+  {"speaker": "Priya - QA", "timestamp": "00:01:55", "text": "Yes please, even temporary help would let me focus on the payments module first since that's the most critical."},
+  {"speaker": "Hana - Host", "timestamp": "00:02:15", "text": "Okay, I'll ask management today about approving a short-term QA contractor."},
+  {"speaker": "Diego - Engineer", "timestamp": "00:02:35", "text": "In the meantime, should we just hold off on merging new features until the backlog clears?"},
+  {"speaker": "Priya - QA", "timestamp": "00:02:55", "text": "That would help, otherwise the backlog just keeps growing and nothing actually ships."}
+]

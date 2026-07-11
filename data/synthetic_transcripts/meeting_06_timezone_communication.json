@@ -1,0 +1,11 @@
+[
+  {"speaker": "Fatima - PM", "timestamp": "00:00:00", "text": "Good morning from London, good evening to the Osaka team. Thanks for staying late again."},
+  {"speaker": "Naoki - Engineer", "timestamp": "00:00:20", "text": "No problem. Quick issue though, we can't merge our branch because we're waiting on a code review from the London team."},
+  {"speaker": "Fatima - PM", "timestamp": "00:00:40", "text": "Who was supposed to review it?"},
+  {"speaker": "Sam - Engineer", "timestamp": "00:01:00", "text": "That was me, sorry. I saw the request but by the time I got to it, everyone in Osaka had already logged off, so I couldn't clarify a question I had."},
+  {"speaker": "Naoki - Engineer", "timestamp": "00:01:20", "text": "And by the time we came online today, we were blocked waiting on your reply. This back and forth is costing us almost a full day each time."},
+  {"speaker": "Fatima - PM", "timestamp": "00:01:40", "text": "That's a real problem with the twelve hour gap. Should we set up an overlap window or an async comment thread instead?"},
+  {"speaker": "Sam - Engineer", "timestamp": "00:02:00", "text": "An async thread might help, at least questions won't just sit there until someone happens to be online."},
+  {"speaker": "Naoki - Engineer", "timestamp": "00:02:20", "text": "Please, because right now every review adds at least a day of delay just from the timezone gap alone."},
+  {"speaker": "Fatima - PM", "timestamp": "00:02:40", "text": "Understood, I'll set up a dedicated async channel for review questions starting today."}
+]

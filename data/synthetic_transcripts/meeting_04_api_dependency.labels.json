@@ -1,0 +1,7 @@
+[
+  {
+    "cause": "the team is still waiting on sandbox API credentials from the shipping vendor",
+    "effect": "the whole integration testing phase is delayed; they can't even simulate an order without live API access",
+    "timestamp": "00:01:20"
+  }
+]

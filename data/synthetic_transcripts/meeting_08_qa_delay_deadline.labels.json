@@ -1,0 +1,12 @@
+[
+  {
+    "cause": "new features kept coming in faster than QA could test them, growing the QA backlog",
+    "effect": "there is a backlog of about fifteen test cases that haven't been run yet",
+    "timestamp": "00:00:20"
+  },
+  {
+    "cause": "there is a backlog of about fifteen test cases that haven't been run yet",
+    "effect": "the team will miss the deadline unless they delay the release or freeze new features immediately",
+    "timestamp": "00:01:40"
+  }
+]

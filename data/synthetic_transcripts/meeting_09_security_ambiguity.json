@@ -1,0 +1,12 @@
+[
+  {"speaker": "Anders - PM", "timestamp": "00:00:00", "text": "The security review flagged our authentication flow. Apparently the requirements around token expiry were never clearly defined."},
+  {"speaker": "Wei - Engineer", "timestamp": "00:00:20", "text": "Right, nobody ever specified whether tokens should expire in 15 minutes or 24 hours. We just guessed 24 hours."},
+  {"speaker": "Sara - Engineer", "timestamp": "00:00:40", "text": "The compliance team is now blocking the release until this ambiguity is resolved and documented properly."},
+  {"speaker": "Anders - PM", "timestamp": "00:01:00", "text": "So we're blocked on compliance sign-off, and compliance is blocked on us clarifying the unclear requirement. It's a bit circular."},
+  {"speaker": "Wei - Engineer", "timestamp": "00:01:20", "text": "We proposed 15 minutes with refresh tokens, but the client's security lead hasn't responded in over a week."},
+  {"speaker": "Sara - Engineer", "timestamp": "00:01:40", "text": "So we're stuck in limbo, no decision either way. Meanwhile the release is fully on hold."},
+  {"speaker": "Anders - PM", "timestamp": "00:02:00", "text": "This lack of a decision is exactly what's holding up the entire release now, not the implementation itself."},
+  {"speaker": "Wei - Engineer", "timestamp": "00:02:20", "text": "Should we just default to industry standard practice and move forward unless told otherwise?"},
+  {"speaker": "Anders - PM", "timestamp": "00:02:40", "text": "Let's do that. I'll send a note saying we'll proceed with 15 minutes plus refresh tokens unless we hear objections by Friday."},
+  {"speaker": "Sara - Engineer", "timestamp": "00:03:00", "text": "That's reasonable, at least it unblocks compliance from reviewing something concrete."}
+]

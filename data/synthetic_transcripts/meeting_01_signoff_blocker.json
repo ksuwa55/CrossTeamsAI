@@ -1,0 +1,13 @@
+[
+  {"speaker": "Jonas - Host", "timestamp": "00:00:05", "text": "Hi everyone, welcome. Let's do a quick round of updates before we jump into the sprint review."},
+  {"speaker": "Aiko - PM", "timestamp": "00:00:20", "text": "Thanks Jonas. From my side, the main blocker is still the data-sharing agreement with the Berlin office. Legal hasn't signed off yet."},
+  {"speaker": "Liam - Engineer", "timestamp": "00:00:45", "text": "Right, we're blocked on that. We can't push the customer records module until we get sign-off on the cross-border data transfer."},
+  {"speaker": "Priya - QA", "timestamp": "00:01:10", "text": "So does that mean we hold off on writing test cases for that module too?"},
+  {"speaker": "Aiko - PM", "timestamp": "00:01:25", "text": "I think so, yes. There's no point testing something that might change shape once legal responds."},
+  {"speaker": "Liam - Engineer", "timestamp": "00:01:50", "text": "It's been two weeks now. Every time I ask, I get told it's pending approval."},
+  {"speaker": "Jonas - Host", "timestamp": "00:02:15", "text": "Can we escalate this? Waiting for approval indefinitely isn't sustainable for the sprint."},
+  {"speaker": "Aiko - PM", "timestamp": "00:02:30", "text": "I'll email the legal team again today and copy the director. Honestly I'm not sure when we'll get a decision."},
+  {"speaker": "Liam - Engineer", "timestamp": "00:02:50", "text": "Because of this, the whole integration timeline with the Berlin team is basically stalled. We can't make progress either way."},
+  {"speaker": "Priya - QA", "timestamp": "00:03:10", "text": "Should we work on something else in the meantime to not waste the sprint?"},
+  {"speaker": "Aiko - PM", "timestamp": "00:03:25", "text": "Yes, please pick up the reporting dashboard tickets instead. Let's revisit this blocker tomorrow."}
+]

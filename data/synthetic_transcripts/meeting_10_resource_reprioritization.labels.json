@@ -1,0 +1,12 @@
+[
+  {
+    "cause": "most of the notifications service logic exists only in Carlos's head with barely any documentation",
+    "effect": "without Carlos, the team doesn't think they can finish the notifications feature in time for Friday's demo",
+    "timestamp": "00:00:40"
+  },
+  {
+    "cause": "the team doesn't think they can finish the notifications feature in time for Friday's demo",
+    "effect": "the team needs to accept that the notifications feature will miss Friday's deadline",
+    "timestamp": "00:01:40"
+  }
+]

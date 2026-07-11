@@ -1,0 +1,12 @@
+[
+  {
+    "cause": "nobody ever specified whether tokens should expire in 15 minutes or 24 hours",
+    "effect": "the compliance team is now blocking the release until this ambiguity is resolved",
+    "timestamp": "00:00:40"
+  },
+  {
+    "cause": "the compliance team is blocking the release over the undefined token expiry requirement",
+    "effect": "the team is blocked on compliance sign-off, while compliance is blocked on the team clarifying the requirement",
+    "timestamp": "00:01:00"
+  }
+]

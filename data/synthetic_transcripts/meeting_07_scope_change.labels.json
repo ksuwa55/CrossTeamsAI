@@ -1,0 +1,12 @@
+[
+  {
+    "cause": "the client added a new requirement for multi-currency support in the invoicing module",
+    "effect": "implementing multi-currency now touches the same code currently being integrated, creating conflicts with ongoing work",
+    "timestamp": "00:00:40"
+  },
+  {
+    "cause": "implementing the multi-currency change conflicts with the ongoing accounting integration work",
+    "effect": "the integration with the accounting system is going to be delayed",
+    "timestamp": "00:01:20"
+  }
+]

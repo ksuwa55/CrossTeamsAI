@@ -1,0 +1,11 @@
+[
+  {"speaker": "Olivia - PM", "timestamp": "00:00:00", "text": "So the client just added a new requirement, they want multi-currency support added to the invoicing module."},
+  {"speaker": "Ben - Engineer", "timestamp": "00:00:20", "text": "Wait, that wasn't in the original scope at all. We're already mid-way through integrating the invoicing service with the accounting system."},
+  {"speaker": "Chloe - Engineer", "timestamp": "00:00:40", "text": "Adding multi-currency now means touching the same code we're currently integrating. That's going to conflict with our current work."},
+  {"speaker": "Olivia - PM", "timestamp": "00:01:00", "text": "I know it's a scope change, but the client is treating it as urgent."},
+  {"speaker": "Ben - Engineer", "timestamp": "00:01:20", "text": "Because of this new requirement, the integration with the accounting system is going to be delayed, we can't do both in parallel safely."},
+  {"speaker": "Chloe - Engineer", "timestamp": "00:01:40", "text": "Can we push the currency feature to the next sprint instead of squeezing it in now?"},
+  {"speaker": "Olivia - PM", "timestamp": "00:02:00", "text": "I'll ask the client, but they may push back since they consider it urgent."},
+  {"speaker": "Ben - Engineer", "timestamp": "00:02:20", "text": "If it stays in this sprint, please expect the accounting integration to slip by at least a week."},
+  {"speaker": "Olivia - PM", "timestamp": "00:02:40", "text": "Understood, I'll make sure the client knows that tradeoff before we commit to anything."}
+]
