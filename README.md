@@ -243,4 +243,4 @@ What it does:
 * Also computes graph coherence metrics on the pooled predicted-triple graph.
 * Writes a markdown report and raw JSON to `eval/results/kg_extraction/`.
 
-See `docs/phase4/architecture.md`, `data-design.md`, and `evaluation-strategy.md` for the full design and known limitations.
+See `docs/phase4/architecture.md`, `data-design.md`, `evaluation-strategy.md`, and `pipeline-flow-and-results.md` for the full design, evaluation results, and known limitations.

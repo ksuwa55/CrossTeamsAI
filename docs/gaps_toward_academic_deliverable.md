@@ -31,7 +31,7 @@ and are recorded here as a reference for future work.
     dashboard, evaluation), but it does not train or compare against a formal
     KG-embedding baseline (e.g. TransE); it evaluates extraction quality and
     graph structure directly instead. See `docs/phase4/evaluation-strategy.md`
-    Known Limitations §5 for the residual gap.
+    Known Limitations §6 for the residual gap.
 - No explicit statement of novelty: what, if anything, is new here relative to
   existing engineering-intelligence / root-cause-analysis tools (e.g. LinearB,
   Jellyfish, Dynatrace Davis AI) versus academic causal-NLP work.
