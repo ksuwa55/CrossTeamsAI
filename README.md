@@ -143,3 +143,34 @@ What it does:
 * `inspect_false_negatives.py` classifies every missed gold pair (`phrasing_mismatch` / `partial_match` / `genuine_miss`) by asking the judge to find the closest prediction.
 
 Results (pooled, `gpt-3.5-turbo` extraction / `gpt-4o-mini` judge): Precision 22.0%, Recall 57.9%, F1 31.9% — see `docs/phase2/pipeline-flow-and-results.md` for the full per-meeting breakdown and interpretation.
+
+## Phase 3: AI Documentation
+
+Generates standardized "model card" documentation for Phase 1 and Phase 2, 
+following the four documentation-requirement categories from Königstorfer & 
+Thalmann (2022) — Model Design Choices, Data Characteristics, Evaluation 
+Metrics, System Modification Log — supplemented by the Model Cards framework 
+(Mitchell et al., 2019).
+
+* Path A (Card generation): `03_AI_documentation/generate_model_card.py`
+
+### `03_AI_documentation/generate_model_card.py`
+
+Purpose: Render a model card for any component under `03_AI_documentation/components/<name>/`.
+
+What it does:
+
+* Reads six human-authored Markdown fragments per component (intended use, 
+  design choices, data characteristics, eval metrics narrative, modification 
+  log, known limitations) — judgment calls that can't be derived from code.
+* Reads evaluation numbers live from `eval/results/**`, keyed by a dotted 
+  path declared in the component's `config.json`, so the metrics table can't 
+  drift from the actual result files.
+* Stamps the output with the current git commit/branch so each card is 
+  traceable to the exact code state it describes.
+* Renders both cards: `docs/phase3/summarization.md`, `docs/phase3/causal_modeling.md`
+
+Usage:
+
+    python 03_AI_documentation/generate_model_card.py --component causal_modeling
+    python 03_AI_documentation/generate_model_card.py --all

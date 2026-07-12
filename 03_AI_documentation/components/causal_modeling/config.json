@@ -1,0 +1,20 @@
+{
+  "title": "Phase 2 — Causal Modeling of Project Bottlenecks",
+  "files_documented": [
+    "02_causal_modeling/",
+    "app/intervention_dashboard.py",
+    "eval/evaluate_causal_extraction.py"
+  ],
+  "output_path": "docs/phase3/causal_modeling.md",
+  "metrics_files": [
+    {
+      "label": "Pooled (10 meetings / 19 gold pairs)",
+      "path": "eval/results/causal_extraction/causal_extraction_raw.json",
+      "fields": {
+        "Precision": "aggregate.precision",
+        "Recall": "aggregate.recall",
+        "F1": "aggregate.f1"
+      }
+    }
+  ]
+}
