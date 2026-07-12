@@ -1,0 +1,6 @@
+[
+  {"subject_text": "Aiko - PM", "subject_type": "person", "relation": "raises_issue", "object_text": "legal sign-off pending on data-sharing agreement", "object_type": "issue", "timestamp": "00:00:20"},
+  {"subject_text": "legal sign-off pending on data-sharing agreement", "subject_type": "issue", "relation": "blocks", "object_text": "customer records module", "object_type": "task", "timestamp": "00:00:45"},
+  {"subject_text": "Liam - Engineer", "subject_type": "person", "relation": "owns", "object_text": "customer records module", "object_type": "task", "timestamp": "00:00:45"},
+  {"subject_text": "Aiko - PM", "subject_type": "person", "relation": "makes_decision", "object_text": "escalate to legal via email and director", "object_type": "decision", "timestamp": "00:02:30"}
+]

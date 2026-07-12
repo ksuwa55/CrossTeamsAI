@@ -1,0 +1,6 @@
+[
+  {"subject_text": "Naoki - Engineer", "subject_type": "person", "relation": "raises_issue", "object_text": "branch blocked waiting on London code review", "object_type": "issue", "timestamp": "00:00:20"},
+  {"subject_text": "Sam - Engineer", "subject_type": "person", "relation": "assigned_to", "object_text": "code review for Osaka branch", "object_type": "task", "timestamp": "00:01:00"},
+  {"subject_text": "twelve hour timezone gap", "subject_type": "issue", "relation": "causes", "object_text": "branch blocked waiting on London code review", "object_type": "issue", "timestamp": "00:01:40"},
+  {"subject_text": "Fatima - PM", "subject_type": "person", "relation": "makes_decision", "object_text": "set up a dedicated async channel for review questions", "object_type": "decision", "timestamp": "00:02:40"}
+]

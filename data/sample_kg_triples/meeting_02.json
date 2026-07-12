@@ -1,0 +1,6 @@
+[
+  {"subject_text": "Sofia - PM", "subject_type": "person", "relation": "raises_issue", "object_text": "guest checkout requirement is ambiguous", "object_type": "issue", "timestamp": "00:00:20", "quote": "The requirement is really unclear.", "meeting_id": "meeting_02_ambiguous_requirement"},
+  {"subject_text": "guest checkout requirement is ambiguous", "subject_type": "issue", "relation": "causes", "object_text": "checkout release may miss Friday deadline", "object_type": "issue", "timestamp": "00:02:20", "quote": "At this rate we're going to miss the Friday deadline for the checkout release.", "meeting_id": "meeting_02_ambiguous_requirement"},
+  {"subject_text": "Sofia - PM", "subject_type": "person", "relation": "makes_decision", "object_text": "get written confirmation from client before coding", "object_type": "decision", "timestamp": "00:01:40", "quote": "Let's please get written confirmation from the client this time before we touch any code.", "meeting_id": "meeting_02_ambiguous_requirement"},
+  {"subject_text": "Mei - Engineer", "subject_type": "person", "relation": "owns", "object_text": "checkout form validation logic", "object_type": "task", "timestamp": "00:02:00", "quote": "We've already lost about three days of work re-doing the form validation logic.", "meeting_id": "meeting_02_ambiguous_requirement"}
+]

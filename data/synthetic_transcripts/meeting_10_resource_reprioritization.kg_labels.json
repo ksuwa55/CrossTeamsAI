@@ -1,0 +1,6 @@
+[
+  {"subject_text": "Felix - Engineer", "subject_type": "person", "relation": "raises_issue", "object_text": "Carlos is out sick and is the only one who understands the notifications service", "object_type": "issue", "timestamp": "00:00:20"},
+  {"subject_text": "Carlos is out sick and is the only one who understands the notifications service", "subject_type": "issue", "relation": "causes", "object_text": "notifications feature will miss Friday deadline", "object_type": "issue", "timestamp": "00:01:40"},
+  {"subject_text": "Nadia - Host", "subject_type": "person", "relation": "makes_decision", "object_text": "reprioritize and demo the dashboard improvements instead", "object_type": "decision", "timestamp": "00:02:20"},
+  {"subject_text": "Ravi - Engineer", "subject_type": "person", "relation": "assigned_to", "object_text": "demo the dashboard improvements", "object_type": "task", "timestamp": "00:02:20"}
+]

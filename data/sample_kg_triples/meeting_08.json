@@ -1,0 +1,6 @@
+[
+  {"subject_text": "Omar - QA", "subject_type": "person", "relation": "raises_issue", "object_text": "QA backlog of fifteen untested cases", "object_type": "issue", "timestamp": "00:00:20", "quote": "We still have a backlog of about fifteen test cases that haven't been run yet.", "meeting_id": "meeting_08_qa_delay_deadline"},
+  {"subject_text": "QA backlog of fifteen untested cases", "subject_type": "issue", "relation": "blocks", "object_text": "Thursday release", "object_type": "task", "timestamp": "00:01:40", "quote": "At this pace we'll miss the deadline unless we either delay the release or freeze new features immediately.", "meeting_id": "meeting_08_qa_delay_deadline"},
+  {"subject_text": "Grace - Host", "subject_type": "person", "relation": "makes_decision", "object_text": "freeze new merges until QA backlog clears", "object_type": "decision", "timestamp": "00:02:20", "quote": "Let's freeze new merges as of today so the testing delay doesn't push the launch even further out.", "meeting_id": "meeting_08_qa_delay_deadline"},
+  {"subject_text": "Omar - QA", "subject_type": "person", "relation": "owns", "object_text": "clearing the QA testing backlog", "object_type": "task", "timestamp": "00:02:40", "quote": "If we freeze now, I think we can clear the backlog by Wednesday.", "meeting_id": "meeting_08_qa_delay_deadline"}
+]
