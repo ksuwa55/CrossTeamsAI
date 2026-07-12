@@ -1,0 +1,81 @@
+{
+  "title": "Phase 1 — Meeting Summarization",
+  "files_documented": [
+    "01_summarization/",
+    "app/cli_runner.py",
+    "app/ui_runner.py"
+  ],
+  "output_path": "docs/phase3/summarization.md",
+  "metrics_files": [
+    {
+      "label": "LLM pipeline — original prompt (n=10)",
+      "path": "eval/results/metrics_eval_original.json",
+      "fields": {
+        "ROUGE-1": "metrics.rouge1.mean",
+        "ROUGE-2": "metrics.rouge2.mean",
+        "ROUGE-L": "metrics.rougeL.mean",
+        "BERTScore F1": "metrics.bertscore_f1.mean"
+      }
+    },
+    {
+      "label": "LLM pipeline — modified prompt (n=10)",
+      "path": "eval/results/metrics_eval_modified.json",
+      "fields": {
+        "ROUGE-1": "metrics.rouge1.mean",
+        "ROUGE-2": "metrics.rouge2.mean",
+        "ROUGE-L": "metrics.rougeL.mean",
+        "BERTScore F1": "metrics.bertscore_f1.mean"
+      }
+    },
+    {
+      "label": "Model swap — gpt-4o (n=23)",
+      "path": "eval/results/model_comparison/results_model_gpt4o_202603121813.json",
+      "fields": {
+        "ROUGE-1": "metrics.rouge1.mean",
+        "ROUGE-2": "metrics.rouge2.mean",
+        "ROUGE-L": "metrics.rougeL.mean",
+        "BERTScore F1": "metrics.bertscore_f1.mean"
+      }
+    },
+    {
+      "label": "Model swap — gpt-4-turbo (n=22)",
+      "path": "eval/results/model_comparison/results_model_gpt4turbo_202603121814.json",
+      "fields": {
+        "ROUGE-1": "metrics.rouge1.mean",
+        "ROUGE-2": "metrics.rouge2.mean",
+        "ROUGE-L": "metrics.rougeL.mean",
+        "BERTScore F1": "metrics.bertscore_f1.mean"
+      }
+    },
+    {
+      "label": "Baseline — TF-IDF extractive (n=281)",
+      "path": "eval/results/ablations/results_baseline_tfidf5_202603121735.json",
+      "fields": {
+        "ROUGE-1": "metrics.rouge1.mean",
+        "ROUGE-2": "metrics.rouge2.mean",
+        "ROUGE-L": "metrics.rougeL.mean",
+        "BERTScore F1": "metrics.bertscore_f1.mean"
+      }
+    },
+    {
+      "label": "Baseline — lead-n (n=281)",
+      "path": "eval/results/ablations/results_baseline_lead_n5_202603121734.json",
+      "fields": {
+        "ROUGE-1": "metrics.rouge1.mean",
+        "ROUGE-2": "metrics.rouge2.mean",
+        "ROUGE-L": "metrics.rougeL.mean",
+        "BERTScore F1": "metrics.bertscore_f1.mean"
+      }
+    },
+    {
+      "label": "Baseline — random (n=281)",
+      "path": "eval/results/ablations/results_baseline_random5_202603121736.json",
+      "fields": {
+        "ROUGE-1": "metrics.rouge1.mean",
+        "ROUGE-2": "metrics.rouge2.mean",
+        "ROUGE-L": "metrics.rougeL.mean",
+        "BERTScore F1": "metrics.bertscore_f1.mean"
+      }
+    }
+  ]
+}
