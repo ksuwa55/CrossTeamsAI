@@ -1,7 +1,5 @@
 # Output summaries and logs
-/output/*
-!/output/causal_events/
-!/output/kg_triples/
+/output/
 /logs/
 /cache/
 /references/
@@ -29,3 +27,5 @@ __pycache__/
 /cache_kg_embeddings/
 /cache_kg_eval/
 
+# evaluation results
+eval/results/

@@ -8,7 +8,9 @@ but never connected to each other — and bundles all three existing dashboards
 (Phase 1 summarizer, Phase 2 causal what-if, Phase 4 KG explorer) into one
 app; (2) fixes packaging so the repo is reproducible/cloneable as open source
 — see the "Open-Sourcing" section of the root `README.md` for the concrete
-decisions: MIT license, pinned dependencies, committed evaluation results.
+decisions: MIT license, pinned dependencies, and the regeneration commands
+that reproduce `eval/results/`, `output/causal_events/`, and
+`output/kg_triples/` from a fresh clone (these stay gitignored — see below).
 
 ## System Architecture
 
@@ -41,8 +43,12 @@ decisions: MIT license, pinned dependencies, committed evaluation results.
 
 `05_integration/pipeline.py` is a separate CLI convenience for regenerating
 everything (including a live Phase 1 summary) end-to-end for a transcript
-directory; the dashboard's Integrated View does not require it to have been
-run — it loads `output/causal_events/` and `output/kg_triples/` directly.
+directory; the dashboard's Integrated View loads `output/causal_events/` and
+`output/kg_triples/` directly rather than requiring it to have been run.
+Both directories are gitignored (LLM-derived, regenerable, not source) — on
+a fresh clone, run `eval/evaluate_causal_extraction.py` and
+`eval/evaluate_kg_extraction.py` first (see root `README.md`) to populate
+them before the Integrated View has anything to show.
 
 ## Components
 
@@ -55,7 +61,7 @@ same 10 files in `data/synthetic_transcripts/`, keyed by the same
 knows about the other's output — this module is the one place that connects
 them.
 
-- `_token_set()` / `_jaccard()`: lowercased word-token overlap, no embeddings and no extra API calls, so cross-linking works fully offline.
+- `_token_set()` / `_jaccard()`: lowercased word-token overlap, no embeddings and no extra API calls, so cross-linking itself is fully deterministic and offline once `output/causal_events/`/`output/kg_triples/` exist locally.
 - `link_causal_and_kg(causal_events, kg_triples, min_score=0.25)`: for every `(causal_event, kg_triple)` pair sharing a `meeting_id`, scores Jaccard overlap between `{cause, effect}` and `{subject_text, object_text, quote}`, with a bonus when `timestamp` matches exactly. Pairs above the threshold are kept, sorted by score.
 - This is a heuristic, not a learned entity linker — see `docs/gaps_toward_academic_deliverable.md` for the residual gap (same category as Phase 4's substring-based person-alias resolution).
 
@@ -102,11 +108,12 @@ app/
 scripts/
 ├── run_dashboard.sh    # Docker build + run for the unified dashboard (port 7860)
 output/
+├── causal_events/      # Per-meeting causal events (gitignored — regenerate via eval/evaluate_causal_extraction.py)
+├── kg_triples/         # Per-meeting KG triples (gitignored — regenerate via eval/evaluate_kg_extraction.py)
 ├── integrated/         # Per-meeting integrated JSON (gitignored — regenerable via pipeline.py)
 ```
 
-`output/causal_events/` and `output/kg_triples/` are committed (see root
-`README.md`'s reproducibility notes) since they're the substrate the
-cross-linker reads and the docs/eval results reference; `output/integrated/`
-itself stays gitignored since it's trivially regenerable offline via
-`pipeline.py --skip-llm`.
+`output/causal_events/`, `output/kg_triples/`, and `eval/results/` all stay
+gitignored — they're LLM-derived, regenerable artifacts, not source. See the
+root `README.md`'s reproducibility notes for the exact commands to regenerate
+them from a fresh clone.

@@ -58,7 +58,8 @@ def generate_live_summary(meeting_id: str):
     except Exception as exc:
         return (
             f"Live summary generation failed ({exc}). This requires a live OpenAI API "
-            "key/credits — the cross-links above work fully offline."
+            "key/credits — the cross-links above only need output/causal_events/ and "
+            "output/kg_triples/ to already exist locally, no live API call."
         )
 
 
@@ -70,6 +71,12 @@ with gr.Blocks(title="Integrated View") as integrated_demo:
         "meeting transcripts. Linking is by shared wording + timestamp "
         "(`05_integration/cross_link.py`) — a heuristic, not a learned entity linker."
     )
+    if not _meeting_ids:
+        gr.Markdown(
+            "**No data found.** `output/causal_events/` and `output/kg_triples/` are "
+            "gitignored (regenerable, not source) — run `python eval/evaluate_causal_extraction.py` "
+            "and `python eval/evaluate_kg_extraction.py` first (see root README) to populate them."
+        )
     meeting_dropdown = gr.Dropdown(_meeting_ids, value=_meeting_ids[0] if _meeting_ids else None, label="Meeting")
     links_md = gr.Markdown()
     meeting_dropdown.change(render_cross_links, inputs=[meeting_dropdown], outputs=[links_md])

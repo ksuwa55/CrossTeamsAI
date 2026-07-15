@@ -23,11 +23,23 @@ Or with Docker:
 bash scripts/run_dashboard.sh   # builds the image and serves the dashboard on :7860
 ```
 
-The dashboard's **Integrated View** tab (Phase 5) and the Knowledge Graph
-Explorer's keyword search work fully offline (no API key needed) since they
-run against committed sample/extracted data. Live summarization, causal/KG
-extraction on new transcripts, and semantic search require a valid
+The Knowledge Graph Explorer's keyword search and the Causal What-If simulator
+work offline (no API key needed) since they run against committed sample data
+(`data/sample_causal_events/`, `data/sample_kg_triples/`). Live summarization,
+causal/KG extraction on new transcripts, and semantic search require a valid
 `OPENAI_API_KEY` with credits.
+
+**Note on reproducing the Integrated View / evaluation numbers:** `output/causal_events/`,
+`output/kg_triples/`, and `eval/results/` are *not* committed (they're
+regenerable, LLM-derived artifacts, not source). On a fresh clone, the
+Integrated View tab and the numbers cited in the Phase 1-4 docs/model cards
+won't be populated until you regenerate them with a valid `OPENAI_API_KEY`:
+
+```bash
+python eval/evaluate_causal_extraction.py   # regenerates output/causal_events/, eval/results/causal_extraction/
+python eval/evaluate_kg_extraction.py       # regenerates output/kg_triples/, eval/results/kg_extraction/
+python eval/evaluate_qmsum.py --preds_jsonl <predictions.jsonl>  # regenerates eval/results/metrics_*
+```
 
 ## License
 
@@ -317,6 +329,5 @@ See `docs/phase5/architecture.md` for the full design.
 * **License**: MIT (`LICENSE`), citation metadata in `CITATION.cff`.
 * **Fixed a `.gitignore` bug**: `Dockerfile`, `requirements.txt`, and `scripts/*.sh` were previously excluded from git entirely (never committed to any branch). They're now tracked.
 * **Pinned dependencies**: `requirements.txt` now pins exact versions instead of unpinned package names.
-* **Committed evaluation results**: `eval/results/` (previously gitignored) is now committed, since the Phase 1-4 docs and model cards cite specific numbers from these files — without them, those claims aren't verifiable without re-running (and re-paying for) live LLM calls.
-* **Committed the aligned extraction outputs**: `output/causal_events/` and `output/kg_triples/` (previously gitignored along with the rest of `output/`) are now committed, since they're the offline substrate Phase 5's cross-linking and Integrated View depend on. The rest of `output/` (large ablation/model-comparison files, generated plots, `output/integrated/`) stays gitignored and regenerable.
+* **`eval/results/`, `output/causal_events/`, and `output/kg_triples/` stay gitignored** — these are LLM-derived, regenerable artifacts, not source, and are kept out of the repo. See "Note on reproducing the Integrated View / evaluation numbers" above for the exact commands to regenerate them from a fresh clone.
 * **`.env.example`** added as a template; `.env` itself stays gitignored.
