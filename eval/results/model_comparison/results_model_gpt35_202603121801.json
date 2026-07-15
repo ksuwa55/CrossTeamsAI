@@ -1,0 +1,49 @@
+{
+  "dataset": "QMSum",
+  "source": "output/model_comparison/model_gpt35.jsonl",
+  "tag": "model_gpt35",
+  "instances": 6,
+  "timestamp": "2026-03-12T18:01:05.754309",
+  "metrics": {
+    "rouge1": {
+      "mean": 0.2787,
+      "ci95_lo": 0.2134,
+      "ci95_hi": 0.3417
+    },
+    "rouge2": {
+      "mean": 0.0394,
+      "ci95_lo": 0.0285,
+      "ci95_hi": 0.0486
+    },
+    "rougeL": {
+      "mean": 0.173,
+      "ci95_lo": 0.1428,
+      "ci95_hi": 0.2088
+    },
+    "rougeLsum": {
+      "mean": 0.173,
+      "ci95_lo": 0.1428,
+      "ci95_hi": 0.2088
+    }
+  },
+  "length": {
+    "pred_words_mean": 101.83,
+    "ref_words_mean": 79.83,
+    "pred_chars_mean": 726.5,
+    "ref_chars_mean": 498.5,
+    "length_ratio_words": 1.28,
+    "length_ratio_chars": 1.46
+  },
+  "breakdown": {
+    "general": {
+      "rouge1": 0.3237,
+      "rouge2": 0.0436,
+      "rougeL": 0.1725
+    },
+    "specific": {
+      "rouge1": 0.2562,
+      "rouge2": 0.0373,
+      "rougeL": 0.1732
+    }
+  }
+}

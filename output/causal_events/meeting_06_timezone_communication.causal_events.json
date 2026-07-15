@@ -1,0 +1,38 @@
+[
+  {
+    "cause": "Code review pending from London team",
+    "effect": "Merge of branch delayed",
+    "timestamp": "00:00:20",
+    "meeting_id": "meeting_06_timezone_communication"
+  },
+  {
+    "cause": "Time zone difference",
+    "effect": "Communication delays",
+    "timestamp": "00:01:20",
+    "meeting_id": "meeting_06_timezone_communication"
+  },
+  {
+    "cause": "Communication delay due to time zone difference",
+    "effect": "Blocking progress on tasks",
+    "timestamp": "00:01:20",
+    "meeting_id": "meeting_06_timezone_communication"
+  },
+  {
+    "cause": "Timezone gap for reviews",
+    "effect": "Delays in reviews",
+    "timestamp": "00:02:20",
+    "meeting_id": "meeting_06_timezone_communication"
+  },
+  {
+    "cause": "Setting up a dedicated async channel for review questions",
+    "effect": "Addressing delays in reviews",
+    "timestamp": "00:02:40",
+    "meeting_id": "meeting_06_timezone_communication"
+  },
+  {
+    "cause": "Timezone gap for review questions",
+    "effect": "Day of delay for every review",
+    "timestamp": "00:02:20",
+    "meeting_id": "meeting_06_timezone_communication"
+  }
+]

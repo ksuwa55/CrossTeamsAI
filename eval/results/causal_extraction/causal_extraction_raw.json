@@ -1,0 +1,596 @@
+{
+  "per_meeting": [
+    {
+      "meeting_id": "meeting_01_signoff_blocker",
+      "num_predicted": 7,
+      "num_gold": 3,
+      "tp": 2,
+      "fp": 5,
+      "fn": 1,
+      "precision": 0.2857142857142857,
+      "recall": 0.6666666666666666,
+      "f1": 0.4,
+      "true_positives": [
+        {
+          "predicted": {
+            "cause": "Data-sharing agreement not signed off by Legal",
+            "effect": "Inability to push the customer records module",
+            "timestamp": "00:00:45",
+            "meeting_id": "meeting_01_signoff_blocker"
+          },
+          "ground_truth": {
+            "cause": "legal sign-off on the data-sharing agreement with Berlin is pending",
+            "effect": "the customer records module cannot be pushed",
+            "timestamp": "00:00:45"
+          }
+        },
+        {
+          "predicted": {
+            "cause": "Integration timeline with Berlin team stalled",
+            "effect": "Inability to make progress",
+            "timestamp": "00:02:50",
+            "meeting_id": "meeting_01_signoff_blocker"
+          },
+          "ground_truth": {
+            "cause": "legal sign-off on the data-sharing agreement with Berlin is pending",
+            "effect": "the whole integration timeline with the Berlin team is basically stalled",
+            "timestamp": "00:02:50"
+          }
+        }
+      ],
+      "false_positives": [
+        {
+          "cause": "Data-sharing agreement not signed off",
+          "effect": "Blocking development of customer records module",
+          "timestamp": "00:00:45",
+          "meeting_id": "meeting_01_signoff_blocker"
+        },
+        {
+          "cause": "Pending approval for cross-border data transfer",
+          "effect": "Blocking push of customer records module",
+          "timestamp": "00:00:45",
+          "meeting_id": "meeting_01_signoff_blocker"
+        },
+        {
+          "cause": "Delay in legal approval",
+          "effect": "Stalled progress on writing test cases",
+          "timestamp": "00:01:10",
+          "meeting_id": "meeting_01_signoff_blocker"
+        },
+        {
+          "cause": "Pending legal approval",
+          "effect": "Unsustainable sprint progress",
+          "timestamp": "00:02:15",
+          "meeting_id": "meeting_01_signoff_blocker"
+        },
+        {
+          "cause": "Delay in approval from legal team",
+          "effect": "Stalled integration timeline with Berlin team",
+          "timestamp": "00:02:50",
+          "meeting_id": "meeting_01_signoff_blocker"
+        }
+      ],
+      "false_negatives": [
+        {
+          "cause": "the customer records module cannot be pushed",
+          "effect": "QA is holding off on writing test cases for that module",
+          "timestamp": "00:01:10"
+        }
+      ]
+    },
+    {
+      "meeting_id": "meeting_02_ambiguous_requirement",
+      "num_predicted": 3,
+      "num_gold": 3,
+      "tp": 1,
+      "fp": 2,
+      "fn": 2,
+      "precision": 0.3333333333333333,
+      "recall": 0.3333333333333333,
+      "f1": 0.3333333333333333,
+      "true_positives": [
+        {
+          "predicted": {
+            "cause": "Ambiguous requirement",
+            "effect": "Lost three days of work re-doing form validation logic",
+            "timestamp": "00:02:00",
+            "meeting_id": "meeting_02_ambiguous_requirement"
+          },
+          "ground_truth": {
+            "cause": "this is the third time a requirement has been reinterpreted mid-sprint",
+            "effect": "about three days of work have been lost re-doing the form validation logic",
+            "timestamp": "00:02:00"
+          }
+        }
+      ],
+      "false_positives": [
+        {
+          "cause": "Scope shifting",
+          "effect": "Likely deadline slip",
+          "timestamp": "00:02:40",
+          "meeting_id": "meeting_02_ambiguous_requirement"
+        },
+        {
+          "cause": "Ambiguous spec update",
+          "effect": "Redoing work next week",
+          "timestamp": "00:03:00",
+          "meeting_id": "meeting_02_ambiguous_requirement"
+        }
+      ],
+      "false_negatives": [
+        {
+          "cause": "the requirement is really unclear",
+          "effect": "there's been confusion about what 'guest checkout' actually means in the spec",
+          "timestamp": "00:00:00"
+        },
+        {
+          "cause": "about three days of work have been lost re-doing the form validation logic",
+          "effect": "the team is going to miss the Friday deadline for the checkout release",
+          "timestamp": "00:02:20"
+        }
+      ]
+    },
+    {
+      "meeting_id": "meeting_03_missing_resource",
+      "num_predicted": 2,
+      "num_gold": 1,
+      "tp": 0,
+      "fp": 2,
+      "fn": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "true_positives": [],
+      "false_positives": [
+        {
+          "cause": "Testing backlog due to lack of resources",
+          "effect": "Blocking every release",
+          "timestamp": "00:01:35",
+          "meeting_id": "meeting_03_missing_resource"
+        },
+        {
+          "cause": "Testing backlog blocking releases",
+          "effect": "Delay in releasing new features",
+          "timestamp": "00:01:35",
+          "meeting_id": "meeting_03_missing_resource"
+        }
+      ],
+      "false_negatives": [
+        {
+          "cause": "QA is backed up",
+          "effect": "three modules are waiting for testing",
+          "timestamp": "00:00:35"
+        }
+      ]
+    },
+    {
+      "meeting_id": "meeting_04_api_dependency",
+      "num_predicted": 8,
+      "num_gold": 1,
+      "tp": 1,
+      "fp": 7,
+      "fn": 0,
+      "precision": 0.125,
+      "recall": 1.0,
+      "f1": 0.2222222222222222,
+      "true_positives": [
+        {
+          "predicted": {
+            "cause": "Delay in receiving sandbox API credentials",
+            "effect": "Stalled progress on shipping partner integration",
+            "timestamp": "00:00:20",
+            "meeting_id": "meeting_04_api_dependency"
+          },
+          "ground_truth": {
+            "cause": "the team is still waiting on sandbox API credentials from the shipping vendor",
+            "effect": "the whole integration testing phase is delayed; they can't even simulate an order without live API access",
+            "timestamp": "00:01:20"
+          }
+        }
+      ],
+      "false_positives": [
+        {
+          "cause": "Delay in receiving sandbox API credentials from shipping vendor",
+          "effect": "Delay in integration testing phase",
+          "timestamp": "00:01:20",
+          "meeting_id": "meeting_04_api_dependency"
+        },
+        {
+          "cause": "No response from support channel",
+          "effect": "Integration testing phase delayed",
+          "timestamp": "00:01:20",
+          "meeting_id": "meeting_04_api_dependency"
+        },
+        {
+          "cause": "Lack of live API access",
+          "effect": "Integration testing phase delay",
+          "timestamp": "00:01:20",
+          "meeting_id": "meeting_04_api_dependency"
+        },
+        {
+          "cause": "Inability to fully validate without real API credentials",
+          "effect": "End-to-end integration delay",
+          "timestamp": "00:02:00",
+          "meeting_id": "meeting_04_api_dependency"
+        },
+        {
+          "cause": "Integration delay extending another week",
+          "effect": "Pushing into next sprint's launch window",
+          "timestamp": "00:02:20",
+          "meeting_id": "meeting_04_api_dependency"
+        },
+        {
+          "cause": "Delay in receiving real credentials",
+          "effect": "Integration delay",
+          "timestamp": "00:02:00",
+          "meeting_id": "meeting_04_api_dependency"
+        },
+        {
+          "cause": "Integration delay pushing into next sprint's launch window",
+          "effect": "Missed launch window",
+          "timestamp": "00:02:20",
+          "meeting_id": "meeting_04_api_dependency"
+        }
+      ],
+      "false_negatives": []
+    },
+    {
+      "meeting_id": "meeting_05_decision_stagnation",
+      "num_predicted": 5,
+      "num_gold": 1,
+      "tp": 0,
+      "fp": 5,
+      "fn": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "true_positives": [],
+      "false_positives": [
+        {
+          "cause": "Disagreement on database choice",
+          "effect": "Delay in finalizing database selection",
+          "timestamp": "00:00:20",
+          "meeting_id": "meeting_05_decision_stagnation"
+        },
+        {
+          "cause": "Unresolved concerns about Postgres scaling",
+          "effect": "Lack of consensus on database choice",
+          "timestamp": "00:01:00",
+          "meeting_id": "meeting_05_decision_stagnation"
+        },
+        {
+          "cause": "Need for a proper load test",
+          "effect": "Delay in making a decision",
+          "timestamp": "00:01:20",
+          "meeting_id": "meeting_05_decision_stagnation"
+        },
+        {
+          "cause": "indecisiveness on architecture",
+          "effect": "blocking the analytics roadmap",
+          "timestamp": "00:01:40",
+          "meeting_id": "meeting_05_decision_stagnation"
+        },
+        {
+          "cause": "indecisiveness on architecture",
+          "effect": "missing the MVP deadline",
+          "timestamp": "00:02:00",
+          "meeting_id": "meeting_05_decision_stagnation"
+        }
+      ],
+      "false_negatives": [
+        {
+          "cause": "the team doesn't think they can decide without a proper load test",
+          "effect": "there is still no consensus and no decision has been made",
+          "timestamp": "00:01:00"
+        }
+      ]
+    },
+    {
+      "meeting_id": "meeting_06_timezone_communication",
+      "num_predicted": 6,
+      "num_gold": 2,
+      "tp": 1,
+      "fp": 5,
+      "fn": 1,
+      "precision": 0.16666666666666666,
+      "recall": 0.5,
+      "f1": 0.25,
+      "true_positives": [
+        {
+          "predicted": {
+            "cause": "Time zone difference",
+            "effect": "Communication delays",
+            "timestamp": "00:01:20",
+            "meeting_id": "meeting_06_timezone_communication"
+          },
+          "ground_truth": {
+            "cause": "the twelve hour timezone gap between London and Osaka",
+            "effect": "the team is blocked waiting on replies, costing almost a full day each time",
+            "timestamp": "00:01:20"
+          }
+        }
+      ],
+      "false_positives": [
+        {
+          "cause": "Code review pending from London team",
+          "effect": "Merge of branch delayed",
+          "timestamp": "00:00:20",
+          "meeting_id": "meeting_06_timezone_communication"
+        },
+        {
+          "cause": "Communication delay due to time zone difference",
+          "effect": "Blocking progress on tasks",
+          "timestamp": "00:01:20",
+          "meeting_id": "meeting_06_timezone_communication"
+        },
+        {
+          "cause": "Timezone gap for reviews",
+          "effect": "Delays in reviews",
+          "timestamp": "00:02:20",
+          "meeting_id": "meeting_06_timezone_communication"
+        },
+        {
+          "cause": "Setting up a dedicated async channel for review questions",
+          "effect": "Addressing delays in reviews",
+          "timestamp": "00:02:40",
+          "meeting_id": "meeting_06_timezone_communication"
+        },
+        {
+          "cause": "Timezone gap for review questions",
+          "effect": "Day of delay for every review",
+          "timestamp": "00:02:20",
+          "meeting_id": "meeting_06_timezone_communication"
+        }
+      ],
+      "false_negatives": [
+        {
+          "cause": "by the time Sam got to the review, the Osaka team had already logged off so he couldn't clarify a question he had",
+          "effect": "the Osaka team's branch cannot be merged because it's waiting on a code review from London",
+          "timestamp": "00:00:20"
+        }
+      ]
+    },
+    {
+      "meeting_id": "meeting_07_scope_change",
+      "num_predicted": 4,
+      "num_gold": 2,
+      "tp": 1,
+      "fp": 3,
+      "fn": 1,
+      "precision": 0.25,
+      "recall": 0.5,
+      "f1": 0.3333333333333333,
+      "true_positives": [
+        {
+          "predicted": {
+            "cause": "Adding multi-currency feature",
+            "effect": "Integration with the accounting system being delayed",
+            "timestamp": "00:01:20",
+            "meeting_id": "meeting_07_scope_change"
+          },
+          "ground_truth": {
+            "cause": "implementing the multi-currency change conflicts with the ongoing accounting integration work",
+            "effect": "the integration with the accounting system is going to be delayed",
+            "timestamp": "00:01:20"
+          }
+        }
+      ],
+      "false_positives": [
+        {
+          "cause": "New requirement for currency feature",
+          "effect": "Delay in integration with accounting system",
+          "timestamp": "00:01:20",
+          "meeting_id": "meeting_07_scope_change"
+        },
+        {
+          "cause": "Pushing the currency feature to the next sprint",
+          "effect": "Accounting integration slipping by at least a week",
+          "timestamp": "00:02:20",
+          "meeting_id": "meeting_07_scope_change"
+        },
+        {
+          "cause": "Client urgency",
+          "effect": "Accounting integration delay",
+          "timestamp": "00:02:20",
+          "meeting_id": "meeting_07_scope_change"
+        }
+      ],
+      "false_negatives": [
+        {
+          "cause": "the client added a new requirement for multi-currency support in the invoicing module",
+          "effect": "implementing multi-currency now touches the same code currently being integrated, creating conflicts with ongoing work",
+          "timestamp": "00:00:40"
+        }
+      ]
+    },
+    {
+      "meeting_id": "meeting_08_qa_delay_deadline",
+      "num_predicted": 6,
+      "num_gold": 2,
+      "tp": 2,
+      "fp": 4,
+      "fn": 0,
+      "precision": 0.3333333333333333,
+      "recall": 1.0,
+      "f1": 0.5,
+      "true_positives": [
+        {
+          "predicted": {
+            "cause": "Backlog of untested test cases",
+            "effect": "Testing progress delay",
+            "timestamp": "00:00:20",
+            "meeting_id": "meeting_08_qa_delay_deadline"
+          },
+          "ground_truth": {
+            "cause": "there is a backlog of about fifteen test cases that haven't been run yet",
+            "effect": "the team will miss the deadline unless they delay the release or freeze new features immediately",
+            "timestamp": "00:01:40"
+          }
+        },
+        {
+          "predicted": {
+            "cause": "New features coming in faster than testing capacity",
+            "effect": "QA backlog growing",
+            "timestamp": "00:01:00",
+            "meeting_id": "meeting_08_qa_delay_deadline"
+          },
+          "ground_truth": {
+            "cause": "new features kept coming in faster than QA could test them, growing the QA backlog",
+            "effect": "there is a backlog of about fifteen test cases that haven't been run yet",
+            "timestamp": "00:00:20"
+          }
+        }
+      ],
+      "false_positives": [
+        {
+          "cause": "QA backlog growing",
+          "effect": "Missing the deadline",
+          "timestamp": "00:01:40",
+          "meeting_id": "meeting_08_qa_delay_deadline"
+        },
+        {
+          "cause": "Freezing new features",
+          "effect": "Possibility of hitting the deadline",
+          "timestamp": "00:01:40",
+          "meeting_id": "meeting_08_qa_delay_deadline"
+        },
+        {
+          "cause": "Testing backlog",
+          "effect": "Risk of missing deadline",
+          "timestamp": "00:01:40",
+          "meeting_id": "meeting_08_qa_delay_deadline"
+        },
+        {
+          "cause": "Freezing new feature work",
+          "effect": "Possibility to clear backlog by Wednesday",
+          "timestamp": "00:02:40",
+          "meeting_id": "meeting_08_qa_delay_deadline"
+        }
+      ],
+      "false_negatives": []
+    },
+    {
+      "meeting_id": "meeting_09_security_ambiguity",
+      "num_predicted": 2,
+      "num_gold": 2,
+      "tp": 1,
+      "fp": 1,
+      "fn": 1,
+      "precision": 0.5,
+      "recall": 0.5,
+      "f1": 0.5,
+      "true_positives": [
+        {
+          "predicted": {
+            "cause": "Ambiguity regarding token expiration time",
+            "effect": "Compliance team blocking the release",
+            "timestamp": "00:00:40",
+            "meeting_id": "meeting_09_security_ambiguity"
+          },
+          "ground_truth": {
+            "cause": "nobody ever specified whether tokens should expire in 15 minutes or 24 hours",
+            "effect": "the compliance team is now blocking the release until this ambiguity is resolved",
+            "timestamp": "00:00:40"
+          }
+        }
+      ],
+      "false_positives": [
+        {
+          "cause": "Client's security lead not responding to proposed token expiration time",
+          "effect": "Delay in resolving the unclear requirement",
+          "timestamp": "00:01:20",
+          "meeting_id": "meeting_09_security_ambiguity"
+        }
+      ],
+      "false_negatives": [
+        {
+          "cause": "the compliance team is blocking the release over the undefined token expiry requirement",
+          "effect": "the team is blocked on compliance sign-off, while compliance is blocked on the team clarifying the requirement",
+          "timestamp": "00:01:00"
+        }
+      ]
+    },
+    {
+      "meeting_id": "meeting_10_resource_reprioritization",
+      "num_predicted": 7,
+      "num_gold": 2,
+      "tp": 2,
+      "fp": 5,
+      "fn": 0,
+      "precision": 0.2857142857142857,
+      "recall": 1.0,
+      "f1": 0.4444444444444445,
+      "true_positives": [
+        {
+          "predicted": {
+            "cause": "Lack of documentation",
+            "effect": "Team unable to proceed with work",
+            "timestamp": "00:02:40",
+            "meeting_id": "meeting_10_resource_reprioritization"
+          },
+          "ground_truth": {
+            "cause": "most of the notifications service logic exists only in Carlos's head with barely any documentation",
+            "effect": "without Carlos, the team doesn't think they can finish the notifications feature in time for Friday's demo",
+            "timestamp": "00:00:40"
+          }
+        },
+        {
+          "predicted": {
+            "cause": "Resource gap",
+            "effect": "Notifications feature will miss Friday's deadline",
+            "timestamp": "00:01:40",
+            "meeting_id": "meeting_10_resource_reprioritization"
+          },
+          "ground_truth": {
+            "cause": "the team doesn't think they can finish the notifications feature in time for Friday's demo",
+            "effect": "the team needs to accept that the notifications feature will miss Friday's deadline",
+            "timestamp": "00:01:40"
+          }
+        }
+      ],
+      "false_positives": [
+        {
+          "cause": "Carlos being out sick",
+          "effect": "Dependency on notifications service",
+          "timestamp": "00:00:20",
+          "meeting_id": "meeting_10_resource_reprioritization"
+        },
+        {
+          "cause": "Carlos being out sick",
+          "effect": "Inability to finish the notifications feature in time for the demo",
+          "timestamp": "00:00:40",
+          "meeting_id": "meeting_10_resource_reprioritization"
+        },
+        {
+          "cause": "Lack of documentation",
+          "effect": "Inability to finish the notifications feature in time for the demo on Friday",
+          "timestamp": "00:01:20",
+          "meeting_id": "meeting_10_resource_reprioritization"
+        },
+        {
+          "cause": "Lack of documentation",
+          "effect": "Delay in feature completion",
+          "timestamp": "00:01:40",
+          "meeting_id": "meeting_10_resource_reprioritization"
+        },
+        {
+          "cause": "Lack of documentation",
+          "effect": "Repeating the same issue",
+          "timestamp": "00:03:00",
+          "meeting_id": "meeting_10_resource_reprioritization"
+        }
+      ],
+      "false_negatives": []
+    }
+  ],
+  "aggregate": {
+    "num_predicted": 50,
+    "num_gold": 19,
+    "tp": 11,
+    "fp": 39,
+    "fn": 8,
+    "precision": 0.22,
+    "recall": 0.5789473684210527,
+    "f1": 0.3188405797101449
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "dataset": "QMSum",
+  "source": "output/ablations/ablation_temp02.jsonl",
+  "tag": "ablation_temp02",
+  "instances": 10,
+  "timestamp": "2026-03-12T18:01:07.332163",
+  "metrics": {
+    "rouge1": {
+      "mean": 0.2637,
+      "ci95_lo": 0.2143,
+      "ci95_hi": 0.3093
+    },
+    "rouge2": {
+      "mean": 0.043,
+      "ci95_lo": 0.0283,
+      "ci95_hi": 0.0627
+    },
+    "rougeL": {
+      "mean": 0.1631,
+      "ci95_lo": 0.1376,
+      "ci95_hi": 0.188
+    },
+    "rougeLsum": {
+      "mean": 0.1631,
+      "ci95_lo": 0.1376,
+      "ci95_hi": 0.188
+    }
+  },
+  "length": {
+    "pred_words_mean": 85.5,
+    "ref_words_mean": 65.7,
+    "pred_chars_mean": 616.2,
+    "ref_chars_mean": 404.0,
+    "length_ratio_words": 1.3,
+    "length_ratio_chars": 1.53
+  },
+  "breakdown": {
+    "general": {
+      "rouge1": 0.3201,
+      "rouge2": 0.0403,
+      "rougeL": 0.1735
+    },
+    "specific": {
+      "rouge1": 0.2495,
+      "rouge2": 0.0437,
+      "rougeL": 0.1605
+    }
+  }
+}

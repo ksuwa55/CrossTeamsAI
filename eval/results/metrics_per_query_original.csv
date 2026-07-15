@@ -1,0 +1,11 @@
+meeting_id,query_id,query_type,rouge1,rouge2,rougeL,pred_words,ref_words,bertscore_f1
+education_13,gen-0,general,0.4295,0.1014,0.2148,174,118,0.5803
+covid_9,gen-0,general,0.3232,0.0408,0.1616,115,76,0.6204
+Bro027,gen-0,general,0.3582,0.0677,0.1866,123,141,0.5953
+TS3004a,gen-0,general,0.3857,0.0724,0.1973,113,109,0.6302
+TS3011a,spec-4,specific,0.3509,0.0714,0.1754,84,30,0.6361
+TS3011b,spec-2,specific,0.2126,0.0683,0.1546,159,40,0.5735
+Bmr014,spec-0,specific,0.2533,0.0617,0.1223,191,36,0.6140
+Bmr014,spec-1,specific,0.0745,0.0126,0.0621,141,19,0.5205
+Bed008,spec-5,specific,0.3034,0.0699,0.1931,72,73,0.5678
+Bro004,gen-0,general,0.2000,0.0252,0.1250,167,69,0.5618

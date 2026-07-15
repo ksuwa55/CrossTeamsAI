@@ -1,0 +1,49 @@
+{
+  "dataset": "QMSum",
+  "source": "output/ablations/baseline_tfidf5.jsonl",
+  "tag": "baseline_tfidf5",
+  "instances": 281,
+  "timestamp": "2026-03-12T17:35:30.122944",
+  "metrics": {
+    "rouge1": {
+      "mean": 0.203,
+      "ci95_lo": 0.1943,
+      "ci95_hi": 0.2115
+    },
+    "rouge2": {
+      "mean": 0.0528,
+      "ci95_lo": 0.0469,
+      "ci95_hi": 0.0588
+    },
+    "rougeL": {
+      "mean": 0.1274,
+      "ci95_lo": 0.1213,
+      "ci95_hi": 0.1338
+    },
+    "rougeLsum": {
+      "mean": 0.1274,
+      "ci95_lo": 0.1213,
+      "ci95_hi": 0.1338
+    }
+  },
+  "length": {
+    "pred_words_mean": 229.94,
+    "ref_words_mean": 64.72,
+    "pred_chars_mean": 1279.72,
+    "ref_chars_mean": 400.22,
+    "length_ratio_words": 3.55,
+    "length_ratio_chars": 3.2
+  },
+  "breakdown": {
+    "general": {
+      "rouge1": 0.2038,
+      "rouge2": 0.0364,
+      "rougeL": 0.117
+    },
+    "specific": {
+      "rouge1": 0.2029,
+      "rouge2": 0.0553,
+      "rougeL": 0.129
+    }
+  }
+}

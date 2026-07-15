@@ -1,0 +1,50 @@
+[
+  {
+    "cause": "Delay in receiving sandbox API credentials",
+    "effect": "Stalled progress on shipping partner integration",
+    "timestamp": "00:00:20",
+    "meeting_id": "meeting_04_api_dependency"
+  },
+  {
+    "cause": "Delay in receiving sandbox API credentials from shipping vendor",
+    "effect": "Delay in integration testing phase",
+    "timestamp": "00:01:20",
+    "meeting_id": "meeting_04_api_dependency"
+  },
+  {
+    "cause": "No response from support channel",
+    "effect": "Integration testing phase delayed",
+    "timestamp": "00:01:20",
+    "meeting_id": "meeting_04_api_dependency"
+  },
+  {
+    "cause": "Lack of live API access",
+    "effect": "Integration testing phase delay",
+    "timestamp": "00:01:20",
+    "meeting_id": "meeting_04_api_dependency"
+  },
+  {
+    "cause": "Inability to fully validate without real API credentials",
+    "effect": "End-to-end integration delay",
+    "timestamp": "00:02:00",
+    "meeting_id": "meeting_04_api_dependency"
+  },
+  {
+    "cause": "Integration delay extending another week",
+    "effect": "Pushing into next sprint's launch window",
+    "timestamp": "00:02:20",
+    "meeting_id": "meeting_04_api_dependency"
+  },
+  {
+    "cause": "Delay in receiving real credentials",
+    "effect": "Integration delay",
+    "timestamp": "00:02:00",
+    "meeting_id": "meeting_04_api_dependency"
+  },
+  {
+    "cause": "Integration delay pushing into next sprint's launch window",
+    "effect": "Missed launch window",
+    "timestamp": "00:02:20",
+    "meeting_id": "meeting_04_api_dependency"
+  }
+]

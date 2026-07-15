@@ -1,0 +1,32 @@
+[
+  {
+    "subject_text": "testing",
+    "subject_type": "task",
+    "relation": "depends_on",
+    "object_text": "fifteen test cases",
+    "object_type": "task",
+    "timestamp": "00:00:20",
+    "quote": "Not good. We still have a backlog of about fifteen test cases that haven't been run yet.",
+    "meeting_id": "meeting_08_qa_delay_deadline"
+  },
+  {
+    "subject_text": "Omar - QA",
+    "subject_type": "person",
+    "relation": "makes_decision",
+    "object_text": "freeze new merges",
+    "object_type": "decision",
+    "timestamp": "00:02:20",
+    "quote": "Agreed. Let's freeze new merges as of today so the testing delay doesn't push the launch even further out.",
+    "meeting_id": "meeting_08_qa_delay_deadline"
+  },
+  {
+    "subject_text": "Ines - Engineer",
+    "subject_type": "person",
+    "relation": "discusses",
+    "object_text": "freeze feature work",
+    "object_type": "task",
+    "timestamp": "00:02:00",
+    "quote": "I think we should freeze feature work now and let QA catch up, better than shipping something broken.",
+    "meeting_id": "meeting_08_qa_delay_deadline"
+  }
+]

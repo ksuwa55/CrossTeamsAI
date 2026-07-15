@@ -1,0 +1,49 @@
+{
+  "dataset": "QMSum",
+  "source": "output/ablations/baseline_random5.jsonl",
+  "tag": "baseline_random5",
+  "instances": 281,
+  "timestamp": "2026-03-12T17:36:00.498117",
+  "metrics": {
+    "rouge1": {
+      "mean": 0.1525,
+      "ci95_lo": 0.1454,
+      "ci95_hi": 0.1593
+    },
+    "rouge2": {
+      "mean": 0.0266,
+      "ci95_lo": 0.0233,
+      "ci95_hi": 0.0301
+    },
+    "rougeL": {
+      "mean": 0.1007,
+      "ci95_lo": 0.0963,
+      "ci95_hi": 0.1052
+    },
+    "rougeLsum": {
+      "mean": 0.1007,
+      "ci95_lo": 0.0963,
+      "ci95_hi": 0.1052
+    }
+  },
+  "length": {
+    "pred_words_mean": 133.64,
+    "ref_words_mean": 64.72,
+    "pred_chars_mean": 741.7,
+    "ref_chars_mean": 400.22,
+    "length_ratio_words": 2.07,
+    "length_ratio_chars": 1.85
+  },
+  "breakdown": {
+    "general": {
+      "rouge1": 0.1489,
+      "rouge2": 0.023,
+      "rougeL": 0.0939
+    },
+    "specific": {
+      "rouge1": 0.1531,
+      "rouge2": 0.0271,
+      "rougeL": 0.1018
+    }
+  }
+}

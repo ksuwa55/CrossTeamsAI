@@ -1,0 +1,49 @@
+{
+  "dataset": "QMSum",
+  "source": "output/ablations/ablation_no_prefilter.jsonl",
+  "tag": "ablation_no_prefilter",
+  "instances": 86,
+  "timestamp": "2026-03-12T18:00:38.784638",
+  "metrics": {
+    "rouge1": {
+      "mean": 0.2971,
+      "ci95_lo": 0.2807,
+      "ci95_hi": 0.3135
+    },
+    "rouge2": {
+      "mean": 0.0697,
+      "ci95_lo": 0.0622,
+      "ci95_hi": 0.0778
+    },
+    "rougeL": {
+      "mean": 0.1755,
+      "ci95_lo": 0.1675,
+      "ci95_hi": 0.1842
+    },
+    "rougeLsum": {
+      "mean": 0.1755,
+      "ci95_lo": 0.1675,
+      "ci95_hi": 0.1842
+    }
+  },
+  "length": {
+    "pred_words_mean": 97.0,
+    "ref_words_mean": 65.97,
+    "pred_chars_mean": 678.74,
+    "ref_chars_mean": 405.16,
+    "length_ratio_words": 1.47,
+    "length_ratio_chars": 1.68
+  },
+  "breakdown": {
+    "general": {
+      "rouge1": 0.3535,
+      "rouge2": 0.0644,
+      "rougeL": 0.1853
+    },
+    "specific": {
+      "rouge1": 0.2889,
+      "rouge2": 0.0704,
+      "rougeL": 0.1741
+    }
+  }
+}

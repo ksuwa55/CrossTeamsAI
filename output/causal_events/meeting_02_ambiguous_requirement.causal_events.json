@@ -1,0 +1,20 @@
+[
+  {
+    "cause": "Ambiguous requirement",
+    "effect": "Lost three days of work re-doing form validation logic",
+    "timestamp": "00:02:00",
+    "meeting_id": "meeting_02_ambiguous_requirement"
+  },
+  {
+    "cause": "Scope shifting",
+    "effect": "Likely deadline slip",
+    "timestamp": "00:02:40",
+    "meeting_id": "meeting_02_ambiguous_requirement"
+  },
+  {
+    "cause": "Ambiguous spec update",
+    "effect": "Redoing work next week",
+    "timestamp": "00:03:00",
+    "meeting_id": "meeting_02_ambiguous_requirement"
+  }
+]

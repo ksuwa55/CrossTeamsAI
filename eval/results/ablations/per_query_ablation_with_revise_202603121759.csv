@@ -1,0 +1,4 @@
+meeting_id,query_id,query_type,rouge1,rouge2,rougeL,pred_words,ref_words
+Bro019,gen-0,general,0.2500,0.0360,0.1339,93,128
+Bro019,spec-0,specific,0.1324,0.0149,0.0735,101,34
+Bro019,spec-1,specific,0.2063,0.0484,0.1429,66,57

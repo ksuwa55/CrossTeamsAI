@@ -1,0 +1,49 @@
+{
+  "dataset": "QMSum",
+  "source": "output/ablations/ablation_chunk8k.jsonl",
+  "tag": "ablation_chunk8k",
+  "instances": 95,
+  "timestamp": "2026-03-12T18:14:44.986577",
+  "metrics": {
+    "rouge1": {
+      "mean": 0.2991,
+      "ci95_lo": 0.283,
+      "ci95_hi": 0.3138
+    },
+    "rouge2": {
+      "mean": 0.072,
+      "ci95_lo": 0.0621,
+      "ci95_hi": 0.0824
+    },
+    "rougeL": {
+      "mean": 0.1803,
+      "ci95_lo": 0.1707,
+      "ci95_hi": 0.1903
+    },
+    "rougeLsum": {
+      "mean": 0.1803,
+      "ci95_lo": 0.1707,
+      "ci95_hi": 0.1903
+    }
+  },
+  "length": {
+    "pred_words_mean": 94.64,
+    "ref_words_mean": 66.05,
+    "pred_chars_mean": 657.81,
+    "ref_chars_mean": 406.46,
+    "length_ratio_words": 1.43,
+    "length_ratio_chars": 1.62
+  },
+  "breakdown": {
+    "general": {
+      "rouge1": 0.3592,
+      "rouge2": 0.0743,
+      "rougeL": 0.2028
+    },
+    "specific": {
+      "rouge1": 0.2896,
+      "rouge2": 0.0716,
+      "rougeL": 0.1767
+    }
+  }
+}

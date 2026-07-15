@@ -1,0 +1,14 @@
+[
+  {
+    "cause": "Ambiguity regarding token expiration time",
+    "effect": "Compliance team blocking the release",
+    "timestamp": "00:00:40",
+    "meeting_id": "meeting_09_security_ambiguity"
+  },
+  {
+    "cause": "Client's security lead not responding to proposed token expiration time",
+    "effect": "Delay in resolving the unclear requirement",
+    "timestamp": "00:01:20",
+    "meeting_id": "meeting_09_security_ambiguity"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "cause": "Adding multi-currency feature",
+    "effect": "Integration with the accounting system being delayed",
+    "timestamp": "00:01:20",
+    "meeting_id": "meeting_07_scope_change"
+  },
+  {
+    "cause": "New requirement for currency feature",
+    "effect": "Delay in integration with accounting system",
+    "timestamp": "00:01:20",
+    "meeting_id": "meeting_07_scope_change"
+  },
+  {
+    "cause": "Pushing the currency feature to the next sprint",
+    "effect": "Accounting integration slipping by at least a week",
+    "timestamp": "00:02:20",
+    "meeting_id": "meeting_07_scope_change"
+  },
+  {
+    "cause": "Client urgency",
+    "effect": "Accounting integration delay",
+    "timestamp": "00:02:20",
+    "meeting_id": "meeting_07_scope_change"
+  }
+]

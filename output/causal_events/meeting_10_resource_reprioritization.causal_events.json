@@ -1,0 +1,44 @@
+[
+  {
+    "cause": "Carlos being out sick",
+    "effect": "Dependency on notifications service",
+    "timestamp": "00:00:20",
+    "meeting_id": "meeting_10_resource_reprioritization"
+  },
+  {
+    "cause": "Carlos being out sick",
+    "effect": "Inability to finish the notifications feature in time for the demo",
+    "timestamp": "00:00:40",
+    "meeting_id": "meeting_10_resource_reprioritization"
+  },
+  {
+    "cause": "Lack of documentation",
+    "effect": "Inability to finish the notifications feature in time for the demo on Friday",
+    "timestamp": "00:01:20",
+    "meeting_id": "meeting_10_resource_reprioritization"
+  },
+  {
+    "cause": "Resource gap",
+    "effect": "Notifications feature will miss Friday's deadline",
+    "timestamp": "00:01:40",
+    "meeting_id": "meeting_10_resource_reprioritization"
+  },
+  {
+    "cause": "Lack of documentation",
+    "effect": "Delay in feature completion",
+    "timestamp": "00:01:40",
+    "meeting_id": "meeting_10_resource_reprioritization"
+  },
+  {
+    "cause": "Lack of documentation",
+    "effect": "Repeating the same issue",
+    "timestamp": "00:03:00",
+    "meeting_id": "meeting_10_resource_reprioritization"
+  },
+  {
+    "cause": "Lack of documentation",
+    "effect": "Team unable to proceed with work",
+    "timestamp": "00:02:40",
+    "meeting_id": "meeting_10_resource_reprioritization"
+  }
+]

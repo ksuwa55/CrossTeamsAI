@@ -1,5 +1,7 @@
 # Output summaries and logs
-/output/
+/output/*
+!/output/causal_events/
+!/output/kg_triples/
 /logs/
 /cache/
 /references/
@@ -27,10 +29,3 @@ __pycache__/
 /cache_kg_embeddings/
 /cache_kg_eval/
 
-# evaluation results
-eval/results/
-
-# Docker
-Dockerfile
-requirements.txt
-*.sh

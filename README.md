@@ -1,3 +1,39 @@
+# CrossTeamsAI
+
+An LLM-based pipeline that turns meeting transcripts into: query-focused
+summaries (Phase 1), a causal graph of project bottlenecks with what-if
+simulation (Phase 2), auto-generated model-card documentation (Phase 3), and
+a searchable knowledge graph of people/decisions/issues/tasks (Phase 4) — all
+bundled into one dashboard and cross-linked (Phase 5).
+
+## Quickstart
+
+```bash
+git clone https://github.com/ksuwa55/CrossTeamsAI.git
+cd CrossTeamsAI
+pip install -r requirements.txt
+cp .env.example .env   # then edit .env and set OPENAI_API_KEY
+python app/dashboard.py
+# open http://localhost:7860
+```
+
+Or with Docker:
+
+```bash
+bash scripts/run_dashboard.sh   # builds the image and serves the dashboard on :7860
+```
+
+The dashboard's **Integrated View** tab (Phase 5) and the Knowledge Graph
+Explorer's keyword search work fully offline (no API key needed) since they
+run against committed sample/extracted data. Live summarization, causal/KG
+extraction on new transcripts, and semantic search require a valid
+`OPENAI_API_KEY` with credits.
+
+## License
+
+MIT — see [LICENSE](LICENSE). See [CITATION.cff](CITATION.cff) if you use this
+work in academic writing.
+
 ## Phase 1: Meeting Summarization
 
 Project has two execution paths:
@@ -244,3 +280,43 @@ What it does:
 * Writes a markdown report and raw JSON to `eval/results/kg_extraction/`.
 
 See `docs/phase4/architecture.md`, `data-design.md`, `evaluation-strategy.md`, and `pipeline-flow-and-results.md` for the full design, evaluation results, and known limitations.
+
+## Phase 5: Integration + Open-Sourcing
+
+Bundles Phases 1-4 into a single architecture and fixes packaging so the repo
+is actually reproducible as open source.
+
+* Path A (Cross-linking): `05_integration/cross_link.py`
+* Path B (Orchestration): `05_integration/pipeline.py`
+* Path C (Unified dashboard): `app/dashboard.py`
+
+### `05_integration/cross_link.py`
+
+Purpose: Connect Phase 2's causal events to Phase 4's KG triples — both are extracted from the same 10 synthetic transcripts (`data/synthetic_transcripts/`), keyed by the same `meeting_id`, but neither extraction pipeline knows about the other's output.
+
+What it does:
+
+* `link_causal_and_kg()` — scores every `(causal_event, kg_triple)` pair from the same meeting by word-token Jaccard overlap between `{cause, effect}` and `{subject_text, object_text, quote}`, with a bonus for an exact `timestamp` match. No embeddings, no extra API calls — fully offline and deterministic.
+* Verified against real data: 69 cross-links found across all 10 meetings (e.g. meeting_01's causal event about the data-sharing agreement blocking the customer records module links to the matching KG triple, sharing timestamp `00:00:45`).
+
+### `05_integration/pipeline.py`
+
+Purpose: CLI orchestrator that runs Phase 1 (summary) + Phase 2 (causal events) + Phase 4 (KG triples) over a transcript directory and cross-links the results into one JSON per meeting (`output/integrated/<meeting_id>.integrated.json`).
+
+* `--skip-llm` (default): reuses existing `output/causal_events/`/`output/kg_triples/`, zero API calls.
+* `--with-llm`: extracts fresh + generates a live summary.
+
+### `app/dashboard.py`
+
+Purpose: Single entry point bundling all three existing dashboards (Phase 1 Summarizer, Phase 2 Causal What-If, Phase 4 Knowledge Graph Explorer) as tabs, plus a new **Integrated View** tab showing the Phase 2/4 cross-links per meeting (with an optional live-summary button). Single port: **7860**. Reuses the existing dashboards' Gradio `Blocks` objects unmodified.
+
+See `docs/phase5/architecture.md` for the full design.
+
+### Open-sourcing / reproducibility decisions
+
+* **License**: MIT (`LICENSE`), citation metadata in `CITATION.cff`.
+* **Fixed a `.gitignore` bug**: `Dockerfile`, `requirements.txt`, and `scripts/*.sh` were previously excluded from git entirely (never committed to any branch). They're now tracked.
+* **Pinned dependencies**: `requirements.txt` now pins exact versions instead of unpinned package names.
+* **Committed evaluation results**: `eval/results/` (previously gitignored) is now committed, since the Phase 1-4 docs and model cards cite specific numbers from these files — without them, those claims aren't verifiable without re-running (and re-paying for) live LLM calls.
+* **Committed the aligned extraction outputs**: `output/causal_events/` and `output/kg_triples/` (previously gitignored along with the rest of `output/`) are now committed, since they're the offline substrate Phase 5's cross-linking and Integrated View depend on. The rest of `output/` (large ablation/model-comparison files, generated plots, `output/integrated/`) stays gitignored and regenerable.
+* **`.env.example`** added as a template; `.env` itself stays gitignored.

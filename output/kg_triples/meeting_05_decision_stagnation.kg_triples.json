@@ -1,0 +1,102 @@
+[
+  {
+    "subject_text": "Elena - Host",
+    "subject_type": "person",
+    "relation": "makes_decision",
+    "object_text": "finalize which database to use for analytics service",
+    "object_type": "decision",
+    "timestamp": "00:00:00",
+    "quote": "We need to finalize which database we're using for the analytics service.",
+    "meeting_id": "meeting_05_decision_stagnation"
+  },
+  {
+    "subject_text": "Raj - Engineer",
+    "subject_type": "person",
+    "relation": "discusses",
+    "object_text": "Postgres as safer choice",
+    "object_type": "decision",
+    "timestamp": "00:00:20",
+    "quote": "I still think Postgres is the safer choice, but the Tokyo team prefers a managed NoSQL option.",
+    "meeting_id": "meeting_05_decision_stagnation"
+  },
+  {
+    "subject_text": "Tokyo team",
+    "subject_type": "person",
+    "relation": "discusses",
+    "object_text": "managed NoSQL option",
+    "object_type": "decision",
+    "timestamp": "00:00:20",
+    "quote": "I still think Postgres is the safer choice, but the Tokyo team prefers a managed NoSQL option.",
+    "meeting_id": "meeting_05_decision_stagnation"
+  },
+  {
+    "subject_text": "Raj - Engineer",
+    "subject_type": "person",
+    "relation": "discusses",
+    "object_text": "Postgres vs. NoSQL",
+    "object_type": "topic",
+    "timestamp": "00:00:20",
+    "quote": "I still think Postgres is the safer choice, but the Tokyo team prefers a managed NoSQL option.",
+    "meeting_id": "meeting_05_decision_stagnation"
+  },
+  {
+    "subject_text": "Kenji - Engineer",
+    "subject_type": "person",
+    "relation": "raises_issue",
+    "object_text": "Postgres scaling for write volume",
+    "object_type": "issue",
+    "timestamp": "00:00:40",
+    "quote": "We raised concerns about Postgres scaling for our expected write volume. No one has really addressed that yet.",
+    "meeting_id": "meeting_05_decision_stagnation"
+  },
+  {
+    "subject_text": "Elena - Host",
+    "subject_type": "person",
+    "relation": "makes_decision",
+    "object_text": "urgency for decision",
+    "object_type": "decision",
+    "timestamp": "00:01:00",
+    "quote": "So we still don't have consensus. Can we get a decision today, please?",
+    "meeting_id": "meeting_05_decision_stagnation"
+  },
+  {
+    "subject_text": "Raj - Engineer",
+    "subject_type": "person",
+    "relation": "blocks",
+    "object_text": "decision without load test",
+    "object_type": "issue",
+    "timestamp": "00:01:20",
+    "quote": "I don't think we can decide without a proper load test. That would take another week at least.",
+    "meeting_id": "meeting_05_decision_stagnation"
+  },
+  {
+    "subject_text": "indecision",
+    "subject_type": "issue",
+    "relation": "blocks",
+    "object_text": "analytics roadmap",
+    "object_type": "task",
+    "timestamp": "00:01:40",
+    "quote": "We've been going back and forth without deciding for so long that the undecided architecture is now blocking the whole analytics roadmap.",
+    "meeting_id": "meeting_05_decision_stagnation"
+  },
+  {
+    "subject_text": "indecision",
+    "subject_type": "issue",
+    "relation": "causes",
+    "object_text": "deadline miss for the analytics MVP next month",
+    "object_type": "issue",
+    "timestamp": "00:02:00",
+    "quote": "This indecision is going to cost us the deadline for the analytics MVP next month.",
+    "meeting_id": "meeting_05_decision_stagnation"
+  },
+  {
+    "subject_text": "decision",
+    "subject_type": "task",
+    "relation": "depends_on",
+    "object_text": "load test",
+    "object_type": "task",
+    "timestamp": "00:02:40",
+    "quote": "Fine by me. If we don't decide by Friday, we'll definitely miss the MVP deadline.",
+    "meeting_id": "meeting_05_decision_stagnation"
+  }
+]
