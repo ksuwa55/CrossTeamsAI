@@ -1,0 +1,6 @@
+[
+  {"subject_text": "Naoki - Engineer", "subject_type": "person", "relation": "raises_issue", "object_text": "branch blocked waiting on London code review", "object_type": "issue", "timestamp": "00:00:20", "quote": "We can't merge our branch because we're waiting on a code review from the London team.", "meeting_id": "meeting_06_timezone_communication"},
+  {"subject_text": "Sam - Engineer", "subject_type": "person", "relation": "assigned_to", "object_text": "code review for Osaka branch", "object_type": "task", "timestamp": "00:01:00", "quote": "That was me, sorry.", "meeting_id": "meeting_06_timezone_communication"},
+  {"subject_text": "twelve hour timezone gap", "subject_type": "issue", "relation": "causes", "object_text": "branch blocked waiting on London code review", "object_type": "issue", "timestamp": "00:01:40", "quote": "That's a real problem with the twelve hour gap.", "meeting_id": "meeting_06_timezone_communication"},
+  {"subject_text": "Fatima - PM", "subject_type": "person", "relation": "makes_decision", "object_text": "set up a dedicated async channel for review questions", "object_type": "decision", "timestamp": "00:02:40", "quote": "I'll set up a dedicated async channel for review questions starting today.", "meeting_id": "meeting_06_timezone_communication"}
+]

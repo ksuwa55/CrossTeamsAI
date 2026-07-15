@@ -1,0 +1,6 @@
+[
+  {"subject_text": "Wei - Engineer", "subject_type": "person", "relation": "raises_issue", "object_text": "token expiry requirement was never clearly defined", "object_type": "issue", "timestamp": "00:00:20"},
+  {"subject_text": "token expiry requirement was never clearly defined", "subject_type": "issue", "relation": "blocks", "object_text": "release", "object_type": "task", "timestamp": "00:00:40"},
+  {"subject_text": "Anders - PM", "subject_type": "person", "relation": "makes_decision", "object_text": "proceed with 15 minutes plus refresh tokens unless objections by Friday", "object_type": "decision", "timestamp": "00:02:40"},
+  {"subject_text": "compliance sign-off", "subject_type": "issue", "relation": "depends_on", "object_text": "token expiry requirement was never clearly defined", "object_type": "issue", "timestamp": "00:01:00"}
+]

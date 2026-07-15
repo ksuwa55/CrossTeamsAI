@@ -1,0 +1,6 @@
+[
+  {"subject_text": "Priya - QA", "subject_type": "person", "relation": "raises_issue", "object_text": "QA is understaffed with one person covering all testing", "object_type": "issue", "timestamp": "00:00:55"},
+  {"subject_text": "QA is understaffed with one person covering all testing", "subject_type": "issue", "relation": "blocks", "object_text": "payments module release", "object_type": "task", "timestamp": "00:01:35"},
+  {"subject_text": "Hana - Host", "subject_type": "person", "relation": "makes_decision", "object_text": "ask management to approve a short-term QA contractor", "object_type": "decision", "timestamp": "00:02:15"},
+  {"subject_text": "Priya - QA", "subject_type": "person", "relation": "owns", "object_text": "payments module testing", "object_type": "task", "timestamp": "00:00:15"}
+]

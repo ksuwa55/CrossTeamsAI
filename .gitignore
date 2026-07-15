@@ -23,6 +23,9 @@ __pycache__/
 /cache_qmsum/
 /cache_causal/
 /cache_causal_eval/
+/cache_kg/
+/cache_kg_embeddings/
+/cache_kg_eval/
 
 # evaluation results
 eval/results/

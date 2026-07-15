@@ -1,11 +1,12 @@
 # Gaps Toward an Academic-Quality Deliverable
 
 This project (Phase 1: Meeting Summarization, Phase 2: Causal Modeling of Project
-Bottlenecks) is implementation-complete and documented to an engineering standard
-(architecture, data design, evaluation strategy, and results for both phases). The
-items below are what would still be required to bring this to the standard of a
-publishable academic deliverable. They are intentionally left out of scope for this
-iteration and are recorded here as a reference for future work.
+Bottlenecks, Phase 3: AI Documentation, Phase 4: Knowledge Graph + Dashboard) is
+implementation-complete and documented to an engineering standard (architecture,
+data design, evaluation strategy, and results for all four phases). The items below
+are what would still be required to bring this to the standard of a publishable
+academic deliverable. They are intentionally left out of scope for this iteration
+and are recorded here as a reference for future work.
 
 ## 1. Literature Review / Theoretical Framing
 
@@ -25,8 +26,12 @@ iteration and are recorded here as a reference for future work.
     `02_causal_modeling/simulate_intervention.py` fit into that toolchain, and
     what limitations are specific to this application vs. inherited from DoWhy
     itself?
-  - Knowledge graph embedding (Wang et al. 2017) — relevant if/when Phase 4
-    (knowledge graph builder) is implemented.
+  - Knowledge graph embedding (Wang et al. 2017) — Phase 4 (`docs/phase4/`) is
+    now implemented (entity/relation extraction, entity-resolved graph, search,
+    dashboard, evaluation), but it does not train or compare against a formal
+    KG-embedding baseline (e.g. TransE); it evaluates extraction quality and
+    graph structure directly instead. See `docs/phase4/evaluation-strategy.md`
+    Known Limitations §6 for the residual gap.
 - No explicit statement of novelty: what, if anything, is new here relative to
   existing engineering-intelligence / root-cause-analysis tools (e.g. LinearB,
   Jellyfish, Dynatrace Davis AI) versus academic causal-NLP work.
@@ -102,3 +107,30 @@ listed here again only for completeness of this gap list:
   The original plan assumed in-person recruitment of undergraduates after
   relocating to the UK; that plan is no longer applicable, and self-sourced
   recruitment was out of scope for this timeboxed round.
+
+## 8. Deferred From Phase 4 (Knowledge Graph + Dashboard)
+
+Already identified as known limitations in
+`docs/phase4/evaluation-strategy.md`, listed here again for completeness:
+
+- **No public-benchmark evaluation.** The original proposal names DocRED and
+  the Open Research Knowledge Graph (ORKG) as candidate benchmarks. Both use
+  annotation schemas different from this project's controlled entity/relation
+  vocabulary (DocRED: document-level RE over a fixed 96-relation Wikipedia
+  ontology; ORKG: scholarly-paper contribution graphs), so benchmarking
+  against either would require a real schema-mapping or transfer-evaluation
+  design rather than a drop-in eval run.
+- **No formal KG-embedding baseline** (e.g. TransE, per Wang et al. 2017) —
+  extraction quality and graph structure are evaluated directly instead.
+- **No usability testing or A/B task-based evaluation of the dashboard** (the
+  spec's "usability tests with project teams navigating dashboards" and
+  "task-based evaluation... against standard tools like Confluence or GitHub
+  Issues") — same category of deferred human evaluation as Phase 1 §7.
+- **Entity resolution is a substring-matching heuristic, not a learned
+  entity linker** — pronouns and nicknames unrelated to a speaker's transcript
+  label won't resolve; no inter-annotator agreement has been measured on the
+  new `*.kg_labels.json` gold set (same caveat as Phase 2 §4).
+- **No integration with Phase 1/2 outputs** — the knowledge graph is built
+  from its own extraction pass over the transcripts rather than incorporating
+  Phase 1's summaries or Phase 2's causal DAG as additional graph structure,
+  despite covering overlapping entities (decisions, issues/blockers).

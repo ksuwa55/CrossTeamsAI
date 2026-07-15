@@ -1,0 +1,6 @@
+[
+  {"subject_text": "Yuki - Engineer", "subject_type": "person", "relation": "raises_issue", "object_text": "shipping vendor sandbox API credentials are late", "object_type": "issue", "timestamp": "00:00:20", "quote": "They said it would take 48 hours, that was five days ago.", "meeting_id": "meeting_04_api_dependency"},
+  {"subject_text": "shipping vendor sandbox API credentials are late", "subject_type": "issue", "relation": "blocks", "object_text": "integration testing phase", "object_type": "task", "timestamp": "00:01:20", "quote": "The whole integration testing phase is delayed.", "meeting_id": "meeting_04_api_dependency"},
+  {"subject_text": "Marco - PM", "subject_type": "person", "relation": "makes_decision", "object_text": "mock the API response until real credentials arrive", "object_type": "decision", "timestamp": "00:01:40", "quote": "Let's mock the API response for now so we're not fully stuck.", "meeting_id": "meeting_04_api_dependency"},
+  {"subject_text": "Marco - PM", "subject_type": "person", "relation": "assigned_to", "object_text": "escalate credentials issue with shipping vendor account manager", "object_type": "task", "timestamp": "00:02:40", "quote": "I'll escalate this to their account manager directly today.", "meeting_id": "meeting_04_api_dependency"}
+]

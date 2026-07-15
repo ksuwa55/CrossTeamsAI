@@ -1,0 +1,6 @@
+[
+  {"subject_text": "Aiko - PM", "subject_type": "person", "relation": "raises_issue", "object_text": "legal sign-off pending on data-sharing agreement", "object_type": "issue", "timestamp": "00:00:20", "quote": "Legal hasn't signed off yet.", "meeting_id": "meeting_01_signoff_blocker"},
+  {"subject_text": "legal sign-off pending on data-sharing agreement", "subject_type": "issue", "relation": "blocks", "object_text": "customer records module", "object_type": "task", "timestamp": "00:00:45", "quote": "We can't push the customer records module until we get sign-off on the cross-border data transfer.", "meeting_id": "meeting_01_signoff_blocker"},
+  {"subject_text": "Liam - Engineer", "subject_type": "person", "relation": "owns", "object_text": "customer records module", "object_type": "task", "timestamp": "00:00:45", "quote": "We're blocked on that.", "meeting_id": "meeting_01_signoff_blocker"},
+  {"subject_text": "Aiko - PM", "subject_type": "person", "relation": "makes_decision", "object_text": "escalate to legal via email and director", "object_type": "decision", "timestamp": "00:02:30", "quote": "I'll email the legal team again today and copy the director.", "meeting_id": "meeting_01_signoff_blocker"}
+]

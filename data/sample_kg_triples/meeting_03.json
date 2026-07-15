@@ -1,0 +1,6 @@
+[
+  {"subject_text": "Priya - QA", "subject_type": "person", "relation": "raises_issue", "object_text": "QA is understaffed with one person covering all testing", "object_type": "issue", "timestamp": "00:00:55", "quote": "We're understaffed on QA. It's not sustainable for one person to cover this much.", "meeting_id": "meeting_03_missing_resource"},
+  {"subject_text": "QA is understaffed with one person covering all testing", "subject_type": "issue", "relation": "blocks", "object_text": "payments module release", "object_type": "task", "timestamp": "00:01:35", "quote": "The testing backlog is basically blocking every release we want to do.", "meeting_id": "meeting_03_missing_resource"},
+  {"subject_text": "Hana - Host", "subject_type": "person", "relation": "makes_decision", "object_text": "ask management to approve a short-term QA contractor", "object_type": "decision", "timestamp": "00:02:15", "quote": "I'll ask management today about approving a short-term QA contractor.", "meeting_id": "meeting_03_missing_resource"},
+  {"subject_text": "Priya - QA", "subject_type": "person", "relation": "owns", "object_text": "payments module testing", "object_type": "task", "timestamp": "00:00:15", "quote": "How's testing going on the payments module?", "meeting_id": "meeting_03_missing_resource"}
+]

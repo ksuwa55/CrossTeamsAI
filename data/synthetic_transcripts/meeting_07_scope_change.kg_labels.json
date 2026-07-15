@@ -1,0 +1,6 @@
+[
+  {"subject_text": "Olivia - PM", "subject_type": "person", "relation": "raises_issue", "object_text": "client added multi-currency support as new scope", "object_type": "issue", "timestamp": "00:00:00"},
+  {"subject_text": "client added multi-currency support as new scope", "subject_type": "issue", "relation": "causes", "object_text": "accounting integration delayed", "object_type": "issue", "timestamp": "00:01:20"},
+  {"subject_text": "Ben - Engineer", "subject_type": "person", "relation": "owns", "object_text": "invoicing accounting system integration", "object_type": "task", "timestamp": "00:00:20"},
+  {"subject_text": "Olivia - PM", "subject_type": "person", "relation": "makes_decision", "object_text": "tell the client about the tradeoff before committing", "object_type": "decision", "timestamp": "00:02:40"}
+]

@@ -174,3 +174,73 @@ Usage:
 
     python 03_AI_documentation/generate_model_card.py --component causal_modeling
     python 03_AI_documentation/generate_model_card.py --all
+
+## Phase 4: Knowledge Graph + Dashboard
+
+Builds a knowledge graph connecting people, decisions, issues/blockers, tasks, and topics from meeting transcripts, then exposes graph search, network visualization, and team-dynamics analytics through a Gradio dashboard. Reuses Phase 1's summarizer/cache and Phase 2's regex prefilter + candidate-window selection unmodified.
+
+* Path A (Per-meeting entity/relation extraction): `04_knowledgegraph_dashboard/extract_entities_relations.py`
+* Path B (Graph build + coherence metrics): `04_knowledgegraph_dashboard/build_knowledge_graph.py`
+* Path C (Search/exploration): `04_knowledgegraph_dashboard/graph_search.py`
+* Path D (Dashboard): `app/kg_dashboard.py`
+* Path E (Extraction evaluation): `eval/evaluate_kg_extraction.py`
+
+### `04_knowledgegraph_dashboard/extract_entities_relations.py`
+
+Purpose: Turn a raw transcript into candidate `(subject, relation, object)` knowledge-graph triples.
+
+What it does:
+
+* Reuses `enrich_transcript()` and `select_candidate_windows()` from `02_causal_modeling/extract_variables.py` unmodified — same regex prefilter and windowing around blocker/decision/next_action utterances.
+* `extract_kg_triples()` — sends each window to the LLM (reuses `MeetingSummarizer` and its disk cache) and asks for triples over a controlled entity-type vocabulary (`person`/`decision`/`issue`/`task`/`topic`) and relation vocabulary (`makes_decision`/`raises_issue`/`blocks`/`causes`/`assigned_to`/`owns`/`discusses`/`resolves`/`depends_on`/`related_to`).
+* `resolve_person_alias()` collapses person mentions onto the transcript's known speaker names (e.g. "Aiko" → "Aiko - PM") for lightweight entity linking.
+* `extract_topic_timeline()` — zero-LLM-call per-utterance topic tags, reused for the dashboard's topic-drift view.
+
+Used by: `eval/evaluate_kg_extraction.py`, `app/kg_dashboard.py` (indirectly, via pre-extracted sample triples)
+
+### `04_knowledgegraph_dashboard/build_knowledge_graph.py`
+
+Purpose: Merge triples from many meetings into one entity-resolved knowledge graph.
+
+What it does:
+
+* `node_key()`: normalizes free-text entity mentions (lowercase, strip punctuation/leading article) scoped by entity type, so the graph doesn't fragment into one node per unique phrasing.
+* `build_graph()`: builds a `networkx.MultiDiGraph` (multiple relation types can connect the same two entities); edge weight = observation count, each edge keeps its source transcript evidence (quote + timestamp).
+* `graph_coherence_metrics()`: density, connected components, modularity/community count, average inter-community conductance — computable without gold labels.
+* `plot_graph()`: matplotlib visualization colored by entity type.
+
+Used by: `04_knowledgegraph_dashboard/graph_search.py`, `app/kg_dashboard.py`, `eval/evaluate_kg_extraction.py`
+
+### `04_knowledgegraph_dashboard/graph_search.py`
+
+Purpose: Search and explore the merged knowledge graph.
+
+What it does:
+
+* `keyword_search()` — substring match over node labels + evidence quotes, zero API calls.
+* `semantic_search()` — OpenAI embeddings (`text-embedding-3-small`), disk-cached, cosine-ranked; requires live API credits for cache misses.
+* `find_path()` / `format_path_evidence()` — shortest path between two entities with the real transcript quotes behind each hop.
+* `ego_subgraph()` — local neighborhood around an entity, for dashboard exploration.
+
+### `app/kg_dashboard.py`
+
+Purpose: Gradio "Knowledge Graph Explorer" web UI (port 7862).
+
+What it does:
+
+* Loads the graph once at startup from `data/sample_kg_triples/*.json` and computes topic timelines + a discussion (speaker co-occurrence) network from `data/synthetic_transcripts/*.json`.
+* **Explore tab**: keyword/semantic search → matching entities + an ego-subgraph plot of the top match.
+* **Network tab**: full graph plot colored by entity type, coherence metrics, and the discussion network (team dynamics).
+* **Topic Drift tab**: per-meeting topic sequence, or topic mix across all meetings ordered by meeting id.
+
+### `eval/evaluate_kg_extraction.py`
+
+Purpose: Score the entity/relation extraction pipeline against 10 hand-labeled synthetic meetings (`data/synthetic_transcripts/*.kg_labels.json`).
+
+What it does:
+
+* Runs `extract_kg_triples()` unmodified, computes entity-linking precision/recall (set overlap on node keys) and relation/fact extraction precision/recall/F1 (LLM judge `gpt-4o-mini` + one-to-one maximum bipartite matching — reuses `parse_judge_response()`/`max_bipartite_matching()` from `eval/evaluate_causal_extraction.py` unmodified).
+* Also computes graph coherence metrics on the pooled predicted-triple graph.
+* Writes a markdown report and raw JSON to `eval/results/kg_extraction/`.
+
+See `docs/phase4/architecture.md`, `data-design.md`, `evaluation-strategy.md`, and `pipeline-flow-and-results.md` for the full design, evaluation results, and known limitations.
