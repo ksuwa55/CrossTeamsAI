@@ -24,12 +24,14 @@ Reused rather than re-collected so Phase 4's extraction quality can be read agai
 
 ### 1. Entity-Linking Precision/Recall
 
-`entity_linking_metrics()` compares the set of predicted entity node keys (`node_key(entity_type, text)`) against the set of gold entity node keys for a meeting:
+`entity_linking_metrics_by_type()` compares predicted entities against gold entities for a meeting, per `entity_type`, then `entity_linking_metrics()` pools across types:
 
-- **Precision**: of the entities the model surfaced, how many correspond to a real gold entity
-- **Recall**: of the gold entities, how many the model surfaced
+- **`person`/`topic`**: exact match on `node_key(entity_type, text)` — `person` is anchored by `resolve_person_alias()` rewriting mentions onto the transcript's speaker label before `node_key()` sees them.
+- **`issue`/`decision`/`task`** (`SEMANTIC_MERGE_TYPES`): predicted and gold mention texts are embedded together (`text-embedding-3-small`, `cache_kg_embeddings/`) and clustered by cosine similarity (`build_knowledge_graph.cluster_by_similarity()`, threshold 0.85 by default, `--similarity-threshold`); a predicted (resp. gold) entity counts as matched if its cluster contains ≥1 gold (resp. predicted) entity (`_semantic_match_counts()`). This tolerates paraphrasing (e.g. predicted "accounting integration slipping by at least a week" vs. gold "accounting integration delayed") that plain `node_key()` string equality would miss.
+- **Precision**: of the entities the model surfaced, how many correspond to a real gold entity (matched-for-precision / predicted).
+- **Recall**: of the gold entities, how many the model surfaced (matched-for-recall / gold). These can differ per type, since one gold mention's cluster can contain several matching predicted variants.
 
-This is the "Top-N precision for entity linking" metric from the phase spec, framed as set precision/recall rather than a ranked Top-N since the extractor doesn't produce a ranked entity list.
+This is the "Top-N precision for entity linking" metric from the phase spec, framed as set precision/recall rather than a ranked Top-N since the extractor doesn't produce a ranked entity list. `--no-semantic-merge` disables the embedding-cluster matching for `issue`/`decision`/`task`, falling back to exact `node_key()` matching for all types.
 
 ### 2. Relation / Fact Extraction: Precision / Recall / F1
 
@@ -73,19 +75,25 @@ Runs `enrich_transcript()` + `extract_kg_triples()` (unmodified pipeline) per me
 | `--extract-model` | `gpt-3.5-turbo` | Extraction quality vs. cost |
 | `--judge-model` | `gpt-4o-mini` | Matching judge; needs reliable structured-JSON output |
 | `--window-before` / `--window-after` | 2 / 1 | Context window size (inherited default from Phase 2) |
+| `--similarity-threshold` | 0.85 | Cosine similarity cutoff shared by both `merge_similar_entities()` (predicted-vs-predicted, feeds the graph) and the semantic entity-linking match (predicted-vs-gold, feeds the eval metric) for `issue`/`decision`/`task` — higher merges/matches more conservatively, lower more aggressively; see `pipeline-flow-and-results.md` "Semantic Entity Merging" for the live threshold sweep of both |
+| `--no-semantic-merge` | off (both passes enabled) | Skips `merge_similar_entities()` *and* semantic entity-linking; entity-linking and graph coherence fall back entirely to raw `node_key()` string matching |
 
 ## Experiment Tracking
 
 - Predictions: `output/kg_triples/*.kg_triples.json`
 - Reports: `eval/results/kg_extraction/kg_extraction_report.md`, `kg_extraction_raw.json`
-- Extraction cache: `cache_kg/`; judge cache: `cache_kg_eval/`; embedding cache (semantic search, not part of this eval): `cache_kg_embeddings/`
+- Extraction cache: `cache_kg/`; judge cache: `cache_kg_eval/`; embedding cache: `cache_kg_embeddings/` — shared across `graph_search.semantic_search()`, `build_knowledge_graph.merge_similar_entities()`, and `evaluate_kg_extraction._semantic_match_counts()`, all keyed by `md5(model + text)` so any mention text in common is only ever embedded once
 
 ## Known Limitations
 
 1. **Small, synthetic dataset**: 10 meetings, 40 gold triples — same scale caveat as Phase 2, directional not precise.
 2. **Judge is itself an LLM**: not a ground-truth oracle, though model-distinct from the extractor.
 3. **Entity resolution is heuristic, not learned**: `resolve_person_alias()` only handles substring-level aliasing against known speakers; it will not resolve pronouns, nicknames unrelated to the speaker label, or cross-meeting aliasing of the same person under different display names.
-4. **Entity-linking is scored with strict normalized-string matching, no paraphrase tolerance**: confirmed by the first live run (see `pipeline-flow-and-results.md`) — `person` entities link well (63.6% gold recall) because `resolve_person_alias()` anchors them to an exact speaker label, but `issue`/`decision` entities essentially never exact-match gold phrasing (0% recall) even when the relation-level LLM judge would call the underlying triple correct. The pooled entity-linking numbers should be read as a lower bound on real linking quality for free-text entity types.
+4. **Entity-linking paraphrase tolerance for free-text types is now implemented as two separate passes, live-evaluated, with different results.** The first live run (`node_key()`-only baseline) confirmed the underlying gap: `person` entities link well (63.6% gold recall) via `resolve_person_alias()`'s deterministic anchor, but `issue`/`decision`/`task` entities essentially never exact-matched gold phrasing (0–23.1% recall). Two fixes were built, both reusing `build_knowledge_graph.cluster_by_similarity()` (cosine similarity, default threshold 0.85, `--similarity-threshold`), both unit-tested with mocked embeddings (`04_knowledgegraph_dashboard/test_build_knowledge_graph.py`, `eval/test_evaluate_kg_extraction.py`), both re-run live end-to-end:
+   - **`merge_similar_entities()`** (predicted-vs-predicted, feeds `build_graph()`): clusters predicted mentions with each other before `node_key()` sees them. **Live result: a null result at the default threshold** — zero mention pairs in this dataset reach 0.85 cosine similarity, so graph coherence is numerically identical to the baseline (see `pipeline-flow-and-results.md` "Semantic Entity Merging" §1). A threshold sweep to 0.65 confirmed this is structural, not a tuning gap: since the merge only clusters predicted mentions with each other (gold is never embedded), it cannot raise entity-linking recall at *any* threshold — recall for a type stuck at 0% pre-merge is mathematically incapable of leaving 0% via this design. It does still reduce graph node count as the threshold drops (110 → 102 across the sweep), which is a real but separate improvement to the dashboard's graph-fragmentation problem.
+   - **Semantic entity linking vs. gold labels** (predicted-vs-gold, feeds `entity_linking_metrics_by_type()`), added specifically to close the gap the above couldn't: embeds predicted *and* gold mention texts together per type per meeting and clusters them, so a predicted mention can match a differently-worded gold mention directly. **Live result: a real improvement** — pooled entity-linking recall moved from 27.9% to 31.1% at the default threshold, with `decision` recall 0% → 20% (`pipeline-flow-and-results.md` "Semantic Entity Merging" §2 has the full by-type numbers and a threshold sweep showing further gains available at lower thresholds, e.g. `task` recall reaches 53.8% at 0.75 — kept at 0.85 by design choice, not because lower thresholds misbehaved).
+
+   Two residual caveats even after both passes: (a) neither can fix an extractor miss where no `issue`/`decision`/`task` mention was predicted at all (a recall-of-the-underlying-fact problem, upstream of linking); (b) `merge_similar_entities()`'s "most frequent mention wins" canonicalization and the semantic-match threshold are both reasonable priors, not calibrated against a larger gold set.
 5. **No public-benchmark evaluation**: the phase spec calls out DocRED and the Open Research Knowledge Graph (ORKG) as candidate benchmarks. Both use different annotation schemas (DocRED: Wikipedia document-level RE with a fixed 96-relation ontology; ORKG: scholarly-paper contribution graphs) that would need a real schema-mapping or transfer-evaluation design, which is out of scope for this pass — recorded as a residual gap in `docs/gaps_toward_academic_deliverable.md`.
 6. **No formal KG-embedding baseline**: Wang et al. (2017)'s survey is cited in the original proposal as background for graph learning; this phase evaluates extraction quality and graph structure directly rather than training/comparing embedding models (e.g. TransE) as a downstream task — also recorded as a residual gap.
 7. **No end-to-end human evaluation**: the dashboard's search/exploration UX is not evaluated with real users (the phase spec's "usability tests with project teams" and "task-based evaluation... A/B comparison" are unimplemented, same category of deferred work as Phase 1's human evaluation — see `docs/gaps_toward_academic_deliverable.md` §7).
