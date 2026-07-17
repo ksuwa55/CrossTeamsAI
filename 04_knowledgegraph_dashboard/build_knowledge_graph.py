@@ -20,6 +20,7 @@ from graph_search import cosine_similarity, embed_texts  # noqa: E402
 
 
 SEMANTIC_MERGE_TYPES: Tuple[str, ...] = ("issue", "decision", "task")
+DEFAULT_SIMILARITY_THRESHOLD = 0.75
 
 
 def cluster_by_similarity(embeddings: Sequence[List[float]], threshold: float) -> List[int]:
@@ -78,7 +79,7 @@ def cluster_mentions(texts: Sequence[str], embeddings: Sequence[List[float]], th
 def merge_similar_entities(
     triples: List[Dict],
     entity_types: Tuple[str, ...] = SEMANTIC_MERGE_TYPES,
-    threshold: float = 0.85,
+    threshold: float = DEFAULT_SIMILARITY_THRESHOLD,
     model: str = "text-embedding-3-small",
     cache_dir: str = "cache_kg_embeddings",
 ) -> List[Dict]:
@@ -283,7 +284,7 @@ if __name__ == "__main__":
     parser.add_argument("--metrics-output", default=None, help="Optional path to save graph coherence metrics JSON")
     parser.add_argument("--no-semantic-merge", action="store_true",
                          help="Skip the embedding-based merge of issue/decision/task mentions (no OpenAI calls)")
-    parser.add_argument("--similarity-threshold", type=float, default=0.85,
+    parser.add_argument("--similarity-threshold", type=float, default=DEFAULT_SIMILARITY_THRESHOLD,
                          help="Cosine similarity threshold for merge_similar_entities()")
     parser.add_argument("--embedding-cache-dir", default="cache_kg_embeddings")
     args = parser.parse_args()

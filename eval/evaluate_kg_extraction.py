@@ -35,7 +35,8 @@ sys.path.insert(0, os.path.join(REPO_ROOT, "02_causal_modeling"))
 
 from extract_entities_relations import enrich_transcript, extract_kg_triples, node_key, save_output  # noqa: E402
 from build_knowledge_graph import (  # noqa: E402
-    build_graph, graph_coherence_metrics, merge_similar_entities, cluster_by_similarity, SEMANTIC_MERGE_TYPES,
+    build_graph, graph_coherence_metrics, merge_similar_entities, cluster_by_similarity,
+    SEMANTIC_MERGE_TYPES, DEFAULT_SIMILARITY_THRESHOLD,
 )
 from graph_search import embed_texts  # noqa: E402
 from summarizer import MeetingSummarizer  # noqa: E402
@@ -119,7 +120,7 @@ def entity_linking_metrics_by_type(
     pred_triples: List[Dict],
     gold_triples: List[Dict],
     semantic_types: Tuple[str, ...] = (),
-    threshold: float = 0.85,
+    threshold: float = DEFAULT_SIMILARITY_THRESHOLD,
     model: str = "text-embedding-3-small",
     cache_dir: str = "cache_kg_embeddings",
 ) -> Dict[str, Dict]:
@@ -179,7 +180,7 @@ def entity_linking_metrics(
     pred_triples: List[Dict],
     gold_triples: List[Dict],
     semantic_types: Tuple[str, ...] = (),
-    threshold: float = 0.85,
+    threshold: float = DEFAULT_SIMILARITY_THRESHOLD,
     model: str = "text-embedding-3-small",
     cache_dir: str = "cache_kg_embeddings",
 ) -> Dict:
@@ -250,7 +251,7 @@ def evaluate_meeting(
     judge_model: str,
     entity_linking_pred_triples: List[Dict] = None,
     semantic_entity_types: Tuple[str, ...] = (),
-    similarity_threshold: float = 0.85,
+    similarity_threshold: float = DEFAULT_SIMILARITY_THRESHOLD,
     embedding_model: str = "text-embedding-3-small",
     embedding_cache_dir: str = "cache_kg_embeddings",
 ) -> Dict:
@@ -428,7 +429,7 @@ def main():
     parser.add_argument("--extraction-cache-dir", default=os.path.join(REPO_ROOT, "cache_kg"))
     parser.add_argument("--judge-cache-dir", default=os.path.join(REPO_ROOT, "cache_kg_eval"))
     parser.add_argument("--embedding-cache-dir", default=os.path.join(REPO_ROOT, "cache_kg_embeddings"))
-    parser.add_argument("--similarity-threshold", type=float, default=0.85,
+    parser.add_argument("--similarity-threshold", type=float, default=DEFAULT_SIMILARITY_THRESHOLD,
                          help="Cosine similarity threshold for merge_similar_entities() and semantic "
                               "entity-linking-vs-gold matching (issue/decision/task only)")
     parser.add_argument("--no-semantic-merge", action="store_true",
