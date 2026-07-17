@@ -79,7 +79,7 @@ def embed_texts(texts: List[str], model: str = "text-embedding-3-small", cache_d
     return results  # type: ignore[return-value]
 
 
-def _cosine_similarity(a: List[float], b: List[float]) -> float:
+def cosine_similarity(a: List[float], b: List[float]) -> float:
     dot = sum(x * y for x, y in zip(a, b))
     norm_a = math.sqrt(sum(x * x for x in a))
     norm_b = math.sqrt(sum(y * y for y in b))
@@ -104,7 +104,7 @@ def semantic_search(
     query_embedding, *node_embeddings = embed_texts([query] + corpora, model=model, cache_dir=cache_dir)
 
     scored = [
-        (node, _cosine_similarity(query_embedding, emb))
+        (node, cosine_similarity(query_embedding, emb))
         for node, emb in zip(nodes, node_embeddings)
     ]
     scored.sort(key=lambda x: x[1], reverse=True)

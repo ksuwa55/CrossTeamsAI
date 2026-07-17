@@ -24,6 +24,7 @@ import glob
 import json
 import os
 import sys
+from collections import defaultdict
 from typing import Dict, List, Tuple
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -33,7 +34,11 @@ sys.path.insert(0, os.path.join(REPO_ROOT, "01_summarization"))
 sys.path.insert(0, os.path.join(REPO_ROOT, "02_causal_modeling"))
 
 from extract_entities_relations import enrich_transcript, extract_kg_triples, node_key, save_output  # noqa: E402
-from build_knowledge_graph import build_graph, graph_coherence_metrics  # noqa: E402
+from build_knowledge_graph import (  # noqa: E402
+    build_graph, graph_coherence_metrics, merge_similar_entities, cluster_by_similarity,
+    SEMANTIC_MERGE_TYPES, DEFAULT_SIMILARITY_THRESHOLD,
+)
+from graph_search import embed_texts  # noqa: E402
 from summarizer import MeetingSummarizer  # noqa: E402
 from evaluate_causal_extraction import parse_judge_response, max_bipartite_matching, format_pct  # noqa: E402
 
@@ -61,27 +66,128 @@ def load_labels(labels_path: str) -> List[Dict]:
 
 # ─── Entity-linking metrics ────────────────────────────────────────
 
-def triple_entity_keys(triples: List[Dict]) -> set:
-    keys = set()
+def _entity_texts_by_type(triples: List[Dict]) -> Dict[str, Dict[str, str]]:
+    """entity_type -> {node_key: one representative raw mention text}."""
+    by_type: Dict[str, Dict[str, str]] = defaultdict(dict)
     for t in triples:
-        keys.add(node_key(t["subject_type"], t["subject_text"]))
-        keys.add(node_key(t["object_type"], t["object_text"]))
-    return keys
+        for role in ("subject", "object"):
+            entity_type = t[f"{role}_type"]
+            text = t[f"{role}_text"]
+            by_type[entity_type].setdefault(node_key(entity_type, text), text)
+    return by_type
 
 
-def entity_linking_metrics(pred_triples: List[Dict], gold_triples: List[Dict]) -> Dict:
-    pred_entities = triple_entity_keys(pred_triples)
-    gold_entities = triple_entity_keys(gold_triples)
-    tp = len(pred_entities & gold_entities)
-    precision = tp / len(pred_entities) if pred_entities else 0.0
-    recall = tp / len(gold_entities) if gold_entities else 0.0
+def _semantic_match_counts(
+    pred_key_to_text: Dict[str, str],
+    gold_key_to_text: Dict[str, str],
+    threshold: float,
+    model: str,
+    cache_dir: str,
+) -> Tuple[int, int]:
+    """Embeds predicted + gold representative mention texts *together* and
+    clusters them with build_knowledge_graph's shared clustering primitive
+    (`cluster_by_similarity()` -- the exact same single-linkage clustering
+    `merge_similar_entities()` uses to merge predicted mentions with each
+    other, applied here across the predicted/gold boundary too, so a
+    predicted mention can match a differently-worded gold mention of the
+    same real-world issue/decision/task instead of requiring exact
+    `node_key()` string equality).
+
+    Returns (matched_predicted, matched_gold): a predicted entity counts
+    toward precision if its cluster contains >=1 gold entity; a gold entity
+    counts toward recall if its cluster contains >=1 predicted entity. (These
+    can differ from each other -- one gold entity's cluster can contain
+    several matching predicted variants, for instance.)"""
+    pred_keys = list(pred_key_to_text.keys())
+    gold_keys = list(gold_key_to_text.keys())
+    if not pred_keys or not gold_keys:
+        return 0, 0
+
+    texts = [pred_key_to_text[k] for k in pred_keys] + [gold_key_to_text[k] for k in gold_keys]
+    embeddings = embed_texts(texts, model=model, cache_dir=cache_dir)
+    cluster_ids = cluster_by_similarity(embeddings, threshold)
+
+    pred_cluster_ids = cluster_ids[:len(pred_keys)]
+    gold_cluster_ids = cluster_ids[len(pred_keys):]
+    mixed_clusters = set(pred_cluster_ids) & set(gold_cluster_ids)
+
+    matched_predicted = sum(1 for cid in pred_cluster_ids if cid in mixed_clusters)
+    matched_gold = sum(1 for cid in gold_cluster_ids if cid in mixed_clusters)
+    return matched_predicted, matched_gold
+
+
+def entity_linking_metrics_by_type(
+    pred_triples: List[Dict],
+    gold_triples: List[Dict],
+    semantic_types: Tuple[str, ...] = (),
+    threshold: float = DEFAULT_SIMILARITY_THRESHOLD,
+    model: str = "text-embedding-3-small",
+    cache_dir: str = "cache_kg_embeddings",
+) -> Dict[str, Dict]:
+    """Entity-linking precision/recall broken out per entity_type. For types
+    in `semantic_types`, a predicted mention matches a gold mention if an
+    embedding clusters them together (`_semantic_match_counts()`), so
+    paraphrased mentions of the same real-world issue/decision/task can
+    match gold without exact string equality. Other types (`person`, `topic`
+    by default) keep exact `node_key()` matching -- `person` already has a
+    deterministic anchor via `resolve_person_alias()`, and fuzzy-matching
+    people risks conflating two different people who are merely discussed
+    similarly."""
+    pred_by_type = _entity_texts_by_type(pred_triples)
+    gold_by_type = _entity_texts_by_type(gold_triples)
+    out = {}
+    for entity_type in sorted(set(pred_by_type) | set(gold_by_type)):
+        pred_key_to_text = pred_by_type.get(entity_type, {})
+        gold_key_to_text = gold_by_type.get(entity_type, {})
+        num_predicted = len(pred_key_to_text)
+        num_gold = len(gold_key_to_text)
+
+        if entity_type in semantic_types:
+            matched_predicted, matched_gold = _semantic_match_counts(
+                pred_key_to_text, gold_key_to_text, threshold, model, cache_dir,
+            )
+        else:
+            tp = len(set(pred_key_to_text) & set(gold_key_to_text))
+            matched_predicted = matched_gold = tp
+
+        out[entity_type] = {
+            "num_predicted_entities": num_predicted,
+            "num_gold_entities": num_gold,
+            "matched_for_precision": matched_predicted,
+            "matched_for_recall": matched_gold,
+            "precision": matched_predicted / num_predicted if num_predicted else 0.0,
+            "recall": matched_gold / num_gold if num_gold else 0.0,
+        }
+    return out
+
+
+def _pool_entity_linking(by_type: Dict[str, Dict]) -> Dict:
+    num_predicted = sum(m["num_predicted_entities"] for m in by_type.values())
+    num_gold = sum(m["num_gold_entities"] for m in by_type.values())
+    matched_predicted = sum(m["matched_for_precision"] for m in by_type.values())
+    matched_gold = sum(m["matched_for_recall"] for m in by_type.values())
     return {
-        "num_predicted_entities": len(pred_entities),
-        "num_gold_entities": len(gold_entities),
-        "matched_entities": tp,
-        "precision": precision,
-        "recall": recall,
+        "num_predicted_entities": num_predicted,
+        "num_gold_entities": num_gold,
+        "matched_for_precision": matched_predicted,
+        "matched_for_recall": matched_gold,
+        "precision": matched_predicted / num_predicted if num_predicted else 0.0,
+        "recall": matched_gold / num_gold if num_gold else 0.0,
     }
+
+
+def entity_linking_metrics(
+    pred_triples: List[Dict],
+    gold_triples: List[Dict],
+    semantic_types: Tuple[str, ...] = (),
+    threshold: float = DEFAULT_SIMILARITY_THRESHOLD,
+    model: str = "text-embedding-3-small",
+    cache_dir: str = "cache_kg_embeddings",
+) -> Dict:
+    """Pooled (all entity types combined) version of entity_linking_metrics_by_type()."""
+    return _pool_entity_linking(
+        entity_linking_metrics_by_type(pred_triples, gold_triples, semantic_types, threshold, model, cache_dir)
+    )
 
 
 # ─── LLM-judge triple matching (reuses causal eval's generic matching code) ─
@@ -143,8 +249,29 @@ def evaluate_meeting(
     gold_triples: List[Dict],
     summarizer: MeetingSummarizer,
     judge_model: str,
+    entity_linking_pred_triples: List[Dict] = None,
+    semantic_entity_types: Tuple[str, ...] = (),
+    similarity_threshold: float = DEFAULT_SIMILARITY_THRESHOLD,
+    embedding_model: str = "text-embedding-3-small",
+    embedding_cache_dir: str = "cache_kg_embeddings",
 ) -> Dict:
-    entity_metrics = entity_linking_metrics(pred_triples, gold_triples)
+    """`entity_linking_pred_triples` lets entity-linking be scored against a
+    semantically-merged view of the predictions (merge_similar_entities(),
+    pooled across meetings before slicing back per-meeting) while relation
+    P/R/F1 below is still judged against the raw, unmerged `pred_triples` --
+    the merge only changes which node a mention resolves to, not whether the
+    underlying fact was extracted. `semantic_entity_types` additionally makes
+    entity-linking itself (both here and in the by-type breakdown) match
+    those types' mentions against gold via embedding clustering rather than
+    exact `node_key()` equality -- kept meeting-scoped (never pooled across
+    meetings) since gold labels are only valid within their own meeting."""
+    if entity_linking_pred_triples is None:
+        entity_linking_pred_triples = pred_triples
+    entity_metrics_by_type = entity_linking_metrics_by_type(
+        entity_linking_pred_triples, gold_triples, semantic_entity_types,
+        similarity_threshold, embedding_model, embedding_cache_dir,
+    )
+    entity_metrics = _pool_entity_linking(entity_metrics_by_type)
 
     if pred_triples and gold_triples:
         matrix = judge_compatibility_matrix(summarizer, pred_triples, gold_triples, judge_model)
@@ -167,6 +294,7 @@ def evaluate_meeting(
     return {
         "meeting_id": meeting_id,
         "entity_linking": entity_metrics,
+        "entity_linking_by_type": entity_metrics_by_type,
         "num_predicted": len(pred_triples),
         "num_gold": len(gold_triples),
         "tp": tp, "fp": fp, "fn": fn,
@@ -179,28 +307,57 @@ def evaluate_meeting(
 
 # ─── Report generation ─────────────────────────────────────────────
 
-def build_markdown_report(per_meeting: List[Dict], aggregate: Dict, agg_entity: Dict,
-                           coherence: Dict, judge_model: str, extract_model: str) -> str:
+def build_markdown_report(per_meeting: List[Dict], aggregate: Dict, agg_entity: Dict, agg_entity_by_type: Dict,
+                           coherence: Dict, judge_model: str, extract_model: str,
+                           similarity_threshold: float, semantic_merge_enabled: bool) -> str:
     lines = []
     lines.append("# Knowledge Graph Extraction Evaluation\n")
     lines.append(
         f"Extraction model: `{extract_model}` (unchanged pipeline). "
-        f"Triple matching: LLM judge (`{judge_model}`), one-to-one maximum bipartite matching per meeting.\n"
+        f"Triple matching: LLM judge (`{judge_model}`), one-to-one maximum bipartite matching per meeting. "
+        + (
+            f"`merge_similar_entities()` (cosine similarity threshold={similarity_threshold}) merges "
+            f"`issue`/`decision`/`task` mentions pooled across meetings before graph coherence is computed; "
+            f"entity-linking below *also* matches those same types against gold labels via embedding "
+            f"clustering at the same threshold (`_semantic_match_counts()`), instead of requiring exact "
+            f"`node_key()` string equality. Relation/fact P/R/F1 is still judged against the raw, unmerged "
+            f"predictions.\n"
+            if semantic_merge_enabled else
+            "Semantic merge/matching was disabled for this run (`--no-semantic-merge`); entity-linking and "
+            "graph coherence use raw `node_key()` string matching only.\n"
+        )
     )
 
     lines.append("## Entity-linking (Top-N precision/recall)\n")
-    lines.append("| Meeting | Pred Entities | Gold Entities | Matched | Precision | Recall |")
-    lines.append("|---|---|---|---|---|---|")
+    lines.append("| Meeting | Pred Entities | Gold Entities | Matched (P) | Matched (R) | Precision | Recall |")
+    lines.append("|---|---|---|---|---|---|---|")
     for m in per_meeting:
         e = m["entity_linking"]
         lines.append(
             f"| {m['meeting_id']} | {e['num_predicted_entities']} | {e['num_gold_entities']} | "
-            f"{e['matched_entities']} | {format_pct(e['precision'])} | {format_pct(e['recall'])} |"
+            f"{e['matched_for_precision']} | {e['matched_for_recall']} | {format_pct(e['precision'])} | {format_pct(e['recall'])} |"
         )
     lines.append(
         f"| **Aggregate (pooled)** | {agg_entity['num_predicted_entities']} | {agg_entity['num_gold_entities']} | "
-        f"{agg_entity['matched_entities']} | {format_pct(agg_entity['precision'])} | {format_pct(agg_entity['recall'])} |\n"
+        f"{agg_entity['matched_for_precision']} | {agg_entity['matched_for_recall']} | "
+        f"{format_pct(agg_entity['precision'])} | {format_pct(agg_entity['recall'])} |\n"
     )
+    lines.append(
+        "*Matched (P)/(R): a predicted (resp. gold) entity counts as matched if it's exact-`node_key()`-equal "
+        "to, or (for semantically-matched types) embedding-clustered with, some gold (resp. predicted) entity "
+        "-- these can differ, since one gold mention's cluster can contain several matching predicted variants.*\n"
+    )
+
+    lines.append("## Entity-linking by type (pooled, micro-averaged)\n")
+    lines.append("| Entity type | Pred Entities | Gold Entities | Matched (P) | Matched (R) | Precision | Recall |")
+    lines.append("|---|---|---|---|---|---|---|")
+    for entity_type in sorted(agg_entity_by_type):
+        e = agg_entity_by_type[entity_type]
+        lines.append(
+            f"| `{entity_type}` | {e['num_predicted_entities']} | {e['num_gold_entities']} | "
+            f"{e['matched_for_precision']} | {e['matched_for_recall']} | {format_pct(e['precision'])} | {format_pct(e['recall'])} |"
+        )
+    lines.append("")
 
     lines.append("## Relation / fact extraction (Precision / Recall / F1)\n")
     lines.append("| Meeting | Predicted | Gold | TP | FP | FN | Precision | Recall | F1 |")
@@ -271,6 +428,13 @@ def main():
     parser.add_argument("--window-after", type=int, default=1)
     parser.add_argument("--extraction-cache-dir", default=os.path.join(REPO_ROOT, "cache_kg"))
     parser.add_argument("--judge-cache-dir", default=os.path.join(REPO_ROOT, "cache_kg_eval"))
+    parser.add_argument("--embedding-cache-dir", default=os.path.join(REPO_ROOT, "cache_kg_embeddings"))
+    parser.add_argument("--similarity-threshold", type=float, default=DEFAULT_SIMILARITY_THRESHOLD,
+                         help="Cosine similarity threshold for merge_similar_entities() and semantic "
+                              "entity-linking-vs-gold matching (issue/decision/task only)")
+    parser.add_argument("--no-semantic-merge", action="store_true",
+                         help="Skip merge_similar_entities() and semantic entity-linking matching; "
+                              "entity-linking/graph coherence use raw node_key() string matching only")
     args = parser.parse_args()
 
     os.makedirs(args.output_dir, exist_ok=True)
@@ -281,7 +445,8 @@ def main():
 
     judge_summarizer = MeetingSummarizer(cache_dir=args.judge_cache_dir)
 
-    per_meeting_results = []
+    pred_by_meeting = {}
+    gold_by_meeting = {}
     all_pred_triples = []
     for meeting_id, transcript_path, labels_path in meetings:
         print(f"\n[{meeting_id}] enriching + extracting triples...")
@@ -296,12 +461,43 @@ def main():
         )
         pred_out_path = os.path.join(args.output_dir, f"{meeting_id}.kg_triples.json")
         save_output(pred_triples, pred_out_path)
+
+        pred_by_meeting[meeting_id] = pred_triples
+        gold_by_meeting[meeting_id] = load_labels(labels_path)
         all_pred_triples.extend(pred_triples)
 
-        gold_triples = load_labels(labels_path)
+    # Semantic merge runs once, pooled across all meetings' predictions (matching
+    # how the real dashboard and the pooled graph-coherence graph below merge
+    # triples from every meeting into one graph) -- then results are sliced back
+    # per meeting for entity-linking. Relation/fact P/R/F1 below is judged
+    # against the raw, unmerged predictions per meeting; the merge only affects
+    # which node a mention resolves to.
+    if args.no_semantic_merge:
+        merged_pred_triples = all_pred_triples
+    else:
+        print(f"\nRunning merge_similar_entities() (threshold={args.similarity_threshold}) over "
+              f"{len(all_pred_triples)} pooled predicted triples...")
+        merged_pred_triples = merge_similar_entities(
+            all_pred_triples, threshold=args.similarity_threshold, cache_dir=args.embedding_cache_dir,
+        )
+    merged_by_meeting = defaultdict(list)
+    for t in merged_pred_triples:
+        merged_by_meeting[t["meeting_id"]].append(t)
 
-        print(f"[{meeting_id}] judging {len(pred_triples)} predicted vs {len(gold_triples)} gold triples...")
-        result = evaluate_meeting(meeting_id, pred_triples, gold_triples, judge_summarizer, args.judge_model)
+    semantic_entity_types = () if args.no_semantic_merge else SEMANTIC_MERGE_TYPES
+
+    per_meeting_results = []
+    for meeting_id, _, _ in meetings:
+        pred_triples = pred_by_meeting[meeting_id]
+        gold_triples = gold_by_meeting[meeting_id]
+        print(f"\n[{meeting_id}] judging {len(pred_triples)} predicted vs {len(gold_triples)} gold triples...")
+        result = evaluate_meeting(
+            meeting_id, pred_triples, gold_triples, judge_summarizer, args.judge_model,
+            entity_linking_pred_triples=merged_by_meeting[meeting_id],
+            semantic_entity_types=semantic_entity_types,
+            similarity_threshold=args.similarity_threshold,
+            embedding_cache_dir=args.embedding_cache_dir,
+        )
         print(
             f"[{meeting_id}] TP={result['tp']} FP={result['fp']} FN={result['fn']} "
             f"P={format_pct(result['precision'])} R={format_pct(result['recall'])} F1={format_pct(result['f1'])}"
@@ -321,21 +517,43 @@ def main():
         "precision": agg_precision, "recall": agg_recall, "f1": agg_f1,
     }
 
-    total_matched = sum(m["entity_linking"]["matched_entities"] for m in per_meeting_results)
+    total_matched_precision = sum(m["entity_linking"]["matched_for_precision"] for m in per_meeting_results)
+    total_matched_recall = sum(m["entity_linking"]["matched_for_recall"] for m in per_meeting_results)
     total_pred_ent = sum(m["entity_linking"]["num_predicted_entities"] for m in per_meeting_results)
     total_gold_ent = sum(m["entity_linking"]["num_gold_entities"] for m in per_meeting_results)
     agg_entity = {
         "num_predicted_entities": total_pred_ent,
         "num_gold_entities": total_gold_ent,
-        "matched_entities": total_matched,
-        "precision": total_matched / total_pred_ent if total_pred_ent else 0.0,
-        "recall": total_matched / total_gold_ent if total_gold_ent else 0.0,
+        "matched_for_precision": total_matched_precision,
+        "matched_for_recall": total_matched_recall,
+        "precision": total_matched_precision / total_pred_ent if total_pred_ent else 0.0,
+        "recall": total_matched_recall / total_gold_ent if total_gold_ent else 0.0,
     }
 
-    graph = build_graph(all_pred_triples)
+    agg_entity_by_type_raw = defaultdict(lambda: {
+        "num_predicted_entities": 0, "num_gold_entities": 0, "matched_for_precision": 0, "matched_for_recall": 0,
+    })
+    for m in per_meeting_results:
+        for entity_type, e in m["entity_linking_by_type"].items():
+            agg_entity_by_type_raw[entity_type]["num_predicted_entities"] += e["num_predicted_entities"]
+            agg_entity_by_type_raw[entity_type]["num_gold_entities"] += e["num_gold_entities"]
+            agg_entity_by_type_raw[entity_type]["matched_for_precision"] += e["matched_for_precision"]
+            agg_entity_by_type_raw[entity_type]["matched_for_recall"] += e["matched_for_recall"]
+    agg_entity_by_type = {}
+    for entity_type, e in agg_entity_by_type_raw.items():
+        agg_entity_by_type[entity_type] = {
+            **e,
+            "precision": e["matched_for_precision"] / e["num_predicted_entities"] if e["num_predicted_entities"] else 0.0,
+            "recall": e["matched_for_recall"] / e["num_gold_entities"] if e["num_gold_entities"] else 0.0,
+        }
+
+    graph = build_graph(merged_pred_triples)
     coherence = graph_coherence_metrics(graph)
 
-    report_md = build_markdown_report(per_meeting_results, aggregate, agg_entity, coherence, args.judge_model, args.extract_model)
+    report_md = build_markdown_report(
+        per_meeting_results, aggregate, agg_entity, agg_entity_by_type, coherence, args.judge_model, args.extract_model,
+        args.similarity_threshold, not args.no_semantic_merge,
+    )
     report_path = os.path.join(args.results_dir, "kg_extraction_report.md")
     with open(report_path, "w", encoding="utf-8") as f:
         f.write(report_md)
@@ -347,7 +565,13 @@ def main():
             "per_meeting": per_meeting_results,
             "aggregate": aggregate,
             "entity_linking_aggregate": agg_entity,
+            "entity_linking_aggregate_by_type": agg_entity_by_type,
             "graph_coherence": coherence,
+            "semantic_merge": {
+                "enabled": not args.no_semantic_merge,
+                "similarity_threshold": args.similarity_threshold,
+                "entity_types": list(SEMANTIC_MERGE_TYPES),
+            },
         }, f, indent=2, ensure_ascii=False)
     print(f"Saved raw matched/unmatched triples to {raw_results_path}")
 

@@ -16,7 +16,10 @@ CAUSAL_PKG = os.path.join(REPO_ROOT, "02_causal_modeling")
 sys.path.insert(0, KG_PKG)
 sys.path.insert(0, CAUSAL_PKG)
 
-from build_knowledge_graph import load_triples, build_graph, graph_coherence_metrics, ENTITY_COLORS  # noqa: E402
+from build_knowledge_graph import (  # noqa: E402
+    load_triples, build_graph, graph_coherence_metrics, merge_similar_entities,
+    ENTITY_COLORS, DEFAULT_SIMILARITY_THRESHOLD,
+)
 from graph_search import keyword_search, semantic_search, ego_subgraph, format_path_evidence  # noqa: E402
 from extract_entities_relations import extract_topic_timeline, extract_speakers  # noqa: E402
 from extract_variables import enrich_transcript  # noqa: E402
@@ -25,8 +28,12 @@ DEFAULT_TRIPLES_GLOB = os.path.join(REPO_ROOT, "data", "sample_kg_triples", "*.j
 DEFAULT_TRANSCRIPTS_DIR = os.path.join(REPO_ROOT, "data", "synthetic_transcripts")
 
 
-def _load_model(triples_glob: str, transcripts_dir: str):
+def _load_model(triples_glob: str, transcripts_dir: str, similarity_threshold: float = DEFAULT_SIMILARITY_THRESHOLD):
     triples = load_triples([triples_glob])
+    try:
+        triples = merge_similar_entities(triples, threshold=similarity_threshold)
+    except Exception as exc:
+        print(f"[kg_dashboard] merge_similar_entities() failed ({exc}); building graph from unmerged triples.")
     graph = build_graph(triples)
 
     transcript_paths = sorted(
@@ -194,7 +201,9 @@ with gr.Blocks(title="Knowledge Graph Explorer") as demo:
     gr.Markdown(
         "Built by `04_knowledgegraph_dashboard/build_knowledge_graph.py` from entity/relation "
         "triples extracted with `extract_entities_relations.py` (reuses Phase 2's transcript "
-        "prefilter). Seed data: `data/sample_kg_triples/*.json`."
+        f"prefilter), with `merge_similar_entities()` (cosine similarity threshold={DEFAULT_SIMILARITY_THRESHOLD}) "
+        "merging near-duplicate `issue`/`decision`/`task` mentions before the graph is built. "
+        "Seed data: `data/sample_kg_triples/*.json`."
     )
 
     with gr.Tab("Explore"):
