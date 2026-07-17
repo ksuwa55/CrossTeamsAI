@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "CrossTeamsAI"
+abstract: >
+  An LLM-based pipeline for meeting summarization (Phase 1), causal modeling
+  of project bottlenecks (Phase 2), AI-generated model-card documentation
+  (Phase 3), and a knowledge graph + dashboard (Phase 4), bundled into a
+  single integrated architecture (Phase 5).
+authors:
+  - name: "ksuwa55"
+repository-code: "https://github.com/ksuwa55/CrossTeamsAI"
+license: MIT
+version: 0.5.0
+date-released: 2026-07-16

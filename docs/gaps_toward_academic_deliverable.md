@@ -98,6 +98,9 @@ listed here again only for completeness of this gap list:
 - No expert review (Agile coaches / PMs) of the causal graph's face validity.
 - No integration between Phase 1 (summarization) and Phase 2 (causal
   querying of past discussions), as specified in the original proposal.
+  Phase 5 (`05_integration/cross_link.py`) addresses the adjacent Phase
+  2↔Phase 4 gap (below) at the glue-layer level, but summarization is still
+  not queried causally — that part of this gap is still open.
 - Two meetings (`meeting_03_missing_resource`, `meeting_05_decision_stagnation`)
   scored 0% precision/recall; left untuned by scope decision.
 
@@ -134,3 +137,10 @@ Already identified as known limitations in
   from its own extraction pass over the transcripts rather than incorporating
   Phase 1's summaries or Phase 2's causal DAG as additional graph structure,
   despite covering overlapping entities (decisions, issues/blockers).
+  Phase 5 (`05_integration/cross_link.py`, `app/dashboard.py`'s Integrated
+  View) partially closes this: it links Phase 2's causal events to Phase 4's
+  KG triples per meeting by token overlap + timestamp matching (69 links
+  found across the 10 synthetic meetings). This is a heuristic post-hoc
+  cross-linker, not a merged graph schema or a learned entity linker, and the
+  cross-link quality itself has no gold-labeled evaluation — both remain
+  open gaps. Phase 1's summaries are still not integrated into the graph.

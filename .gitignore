@@ -29,8 +29,3 @@ __pycache__/
 
 # evaluation results
 eval/results/
-
-# Docker
-Dockerfile
-requirements.txt
-*.sh
