@@ -37,6 +37,23 @@ Given the judge's boolean compatibility matrix per meeting, we take a maximum-ca
 bipartite matching (via networkx) rather than greedy first-match, so that one meeting's
 matching choice doesn't spuriously starve a later pair of its only valid match.
 
+CHAIN-AWARE RECALL (graph-level, alongside the strict pair-level P/R/F1 above):
+  False-negative inspection showed most misses aren't wording mismatches but "which link
+  in the causal chain" mismatches -- the model traces one hop further upstream, or stops
+  one hop short, of the gold label's chosen cause/effect scoping. The strict pair-level
+  match credits none of that, since it requires one predicted pair to match the gold
+  pair's cause AND effect at once. Chain-aware recall instead builds a small directed
+  graph per meeting from the predicted (cause, effect) pairs (raw predicted text as
+  nodes, one edge per pair -- not canonicalized, that happens downstream in
+  build_causal_graph.py) and checks whether a *path* exists from a node matching gold's
+  cause to a node matching gold's effect, crediting multi-hop chains that reach the same
+  conclusion via an intermediate node. Node equivalence ("is this the same real-world
+  thing as gold's cause/effect") is judged by the same LLM-judge approach as the
+  pair-level matching above (single-phrase comparison instead of whole-pair comparison).
+  This is reported as a separate metric, not a replacement for pair-level P/R/F1: it has
+  no precision/F1 counterpart, since graph reachability in raw uncanonicalized text
+  doesn't have a well-defined "false positive edge".
+
 Does not modify extract_causal_events, canonicalize_node, or any other pipeline logic --
 this script only imports and calls them.
 """
@@ -223,6 +240,104 @@ def evaluate_meeting(
     }
 
 
+# ─── Graph-level (chain-aware) evaluation ──────────────────────────
+
+NODE_JUDGE_SYSTEM_PROMPT = (
+    "You are evaluating whether any of several candidate node phrases from a meeting "
+    "transcript's causal graph describe the same real-world thing as a target phrase (a "
+    "cause or an effect taken from a hand-labeled ground-truth pair). A candidate matches "
+    "the target if it refers to the same underlying event, state, decision, or condition, "
+    "even if worded differently or at a different level of detail. For each candidate, "
+    "briefly reason about whether it matches (one short sentence each), then on the LAST "
+    "line output ONLY a JSON array of booleans, in order, no markdown fences."
+)
+
+
+def build_node_judge_prompt(target_phrase: str, node_texts: List[str]) -> str:
+    node_list = "\n".join(f"{i + 1}. \"{n}\"" for i, n in enumerate(node_texts))
+    return (
+        f"Target phrase (a cause or effect from a ground-truth pair):\n\"{target_phrase}\"\n\n"
+        f"Candidate node phrases from the predicted causal graph:\n{node_list}\n\n"
+        f"For each of the {len(node_texts)} candidate phrases above, does it describe the "
+        f"same real-world thing as the target phrase? Reason briefly per phrase, then end "
+        f"with a JSON array of exactly {len(node_texts)} booleans (true/false), in order, "
+        "on its own line."
+    )
+
+
+def judge_node_matches(
+    summarizer: MeetingSummarizer,
+    target_phrase: str,
+    node_texts: List[str],
+    judge_model: str,
+) -> List[bool]:
+    """Returns a bool per node_texts entry: True if the LLM judge considers it the same
+    real-world thing as target_phrase. Reuses parse_judge_response unmodified."""
+    if not node_texts:
+        return []
+    prompt = build_node_judge_prompt(target_phrase, node_texts)
+    raw = summarizer.run_summarizer(
+        prompt,
+        model=judge_model,
+        system_prompt=NODE_JUDGE_SYSTEM_PROMPT,
+        temperature=0.0,
+        max_tokens=400,
+    )
+    return parse_judge_response(raw, len(node_texts))
+
+
+def build_predicted_graph(pred_events: List[Dict]) -> "nx.DiGraph":
+    """Builds a directed graph from raw predicted (cause, effect) text -- one edge per
+    predicted pair. Nodes are NOT canonicalized (that only happens downstream in
+    build_causal_graph.py); this is deliberately out of scope here."""
+    graph = nx.DiGraph()
+    for pair in pred_events:
+        graph.add_edge(pair["cause"], pair["effect"])
+    return graph
+
+
+def evaluate_meeting_chain_aware(
+    meeting_id: str,
+    pred_events: List[Dict],
+    gold_events: List[Dict],
+    summarizer: MeetingSummarizer,
+    judge_model: str,
+) -> Dict:
+    """For each gold pair, checks whether a path exists in the predicted graph from a node
+    matching gold's cause to a node matching gold's effect, rather than requiring a single
+    predicted pair to match the whole gold pair at once. Credits multi-hop chains where the
+    model traced the same relationship through an intermediate node the gold label skipped
+    over (or vice versa)."""
+    graph = build_predicted_graph(pred_events)
+    node_texts = sorted(set(graph.nodes()))
+
+    hits = []
+    misses = []
+    for gold in gold_events:
+        if not node_texts:
+            misses.append(gold)
+            continue
+        cause_matches = judge_node_matches(summarizer, gold["cause"], node_texts, judge_model)
+        effect_matches = judge_node_matches(summarizer, gold["effect"], node_texts, judge_model)
+        cause_nodes = [n for n, ok in zip(node_texts, cause_matches) if ok]
+        effect_nodes = [n for n, ok in zip(node_texts, effect_matches) if ok]
+
+        found_path = any(nx.has_path(graph, c, e) for c in cause_nodes for e in effect_nodes)
+        (hits if found_path else misses).append(gold)
+
+    hit, miss = len(hits), len(misses)
+    chain_recall = hit / (hit + miss) if (hit + miss) else 0.0
+
+    return {
+        "meeting_id": meeting_id,
+        "num_gold": len(gold_events),
+        "chain_hits": hit,
+        "chain_misses": miss,
+        "chain_recall": chain_recall,
+        "chain_missed_pairs": misses,
+    }
+
+
 # ─── Report generation ─────────────────────────────────────────────
 
 def format_pct(x: float) -> str:
@@ -255,6 +370,49 @@ def build_markdown_report(per_meeting: List[Dict], aggregate: Dict, judge_model:
         "\n*Aggregate is pooled (micro-averaged): TP/FP/FN are summed across all meetings "
         "before computing precision/recall/F1.*\n"
     )
+
+    lines.append("## Chain-aware recall (graph reachability)\n")
+    lines.append(
+        "For each gold pair, checks whether a path exists in the predicted graph (raw, "
+        "uncanonicalized predicted cause/effect text as nodes, one edge per predicted pair) "
+        "from a node matching gold's cause to a node matching gold's effect -- node "
+        "equivalence is judged by the same LLM-judge approach as the pair-level matching "
+        "above, applied to single phrases instead of whole pairs. Unlike the pair-level "
+        "metric, this credits multi-hop chains: it does not require one predicted pair to "
+        "match the gold pair's exact cause/effect scoping, so it captures cases where the "
+        "model traced the same causal chain one hop further upstream or downstream than "
+        "the gold label (see docs/phase2/pipeline-flow-and-results.md).\n"
+    )
+    lines.append("| Meeting | Gold | Chain Hits | Chain Misses | Chain Recall |")
+    lines.append("|---|---|---|---|---|")
+    for m in per_meeting:
+        ca = m["chain_aware"]
+        lines.append(
+            f"| {m['meeting_id']} | {ca['num_gold']} | {ca['chain_hits']} | "
+            f"{ca['chain_misses']} | {format_pct(ca['chain_recall'])} |"
+        )
+    ca_agg = aggregate["chain_aware"]
+    lines.append(
+        f"| **Aggregate (pooled)** | {ca_agg['num_gold']} | {ca_agg['chain_hits']} | "
+        f"{ca_agg['chain_misses']} | {format_pct(ca_agg['chain_recall'])} |"
+    )
+    lines.append(
+        "\n*Chain-aware recall has no precision/F1 counterpart: graph reachability over "
+        "raw uncanonicalized text doesn't have a well-defined notion of a \"false positive\" "
+        "edge, so this metric is recall-only (see docs/phase2/evaluation-strategy.md).*\n"
+    )
+
+    lines.append("## Chain-aware misses (no path found, even allowing multi-hop)\n")
+    any_chain_miss = False
+    for m in per_meeting:
+        for gold in m["chain_aware"]["chain_missed_pairs"]:
+            any_chain_miss = True
+            lines.append(
+                f"- **{m['meeting_id']}**: cause=\"{gold['cause']}\" -> effect=\"{gold['effect']}\""
+            )
+    if not any_chain_miss:
+        lines.append("- none")
+    lines.append("")
 
     lines.append("## False positives (predicted, no matching ground truth)\n")
     any_fp = False
@@ -327,6 +485,15 @@ def main():
             f"[{meeting_id}] TP={result['tp']} FP={result['fp']} FN={result['fn']} "
             f"P={format_pct(result['precision'])} R={format_pct(result['recall'])} F1={format_pct(result['f1'])}"
         )
+
+        chain_result = evaluate_meeting_chain_aware(
+            meeting_id, pred_events, gold_events, judge_summarizer, args.judge_model
+        )
+        print(
+            f"[{meeting_id}] chain-aware recall: {chain_result['chain_hits']}/{chain_result['num_gold']} "
+            f"({format_pct(chain_result['chain_recall'])})"
+        )
+        result["chain_aware"] = chain_result
         per_meeting_results.append(result)
 
     total_tp = sum(m["tp"] for m in per_meeting_results)
@@ -339,6 +506,14 @@ def main():
         if (agg_precision + agg_recall)
         else 0.0
     )
+    total_chain_hit = sum(m["chain_aware"]["chain_hits"] for m in per_meeting_results)
+    total_chain_miss = sum(m["chain_aware"]["chain_misses"] for m in per_meeting_results)
+    agg_chain_recall = (
+        total_chain_hit / (total_chain_hit + total_chain_miss)
+        if (total_chain_hit + total_chain_miss)
+        else 0.0
+    )
+
     aggregate = {
         "num_predicted": sum(m["num_predicted"] for m in per_meeting_results),
         "num_gold": sum(m["num_gold"] for m in per_meeting_results),
@@ -348,6 +523,12 @@ def main():
         "precision": agg_precision,
         "recall": agg_recall,
         "f1": agg_f1,
+        "chain_aware": {
+            "num_gold": sum(m["chain_aware"]["num_gold"] for m in per_meeting_results),
+            "chain_hits": total_chain_hit,
+            "chain_misses": total_chain_miss,
+            "chain_recall": agg_chain_recall,
+        },
     }
 
     report_md = build_markdown_report(per_meeting_results, aggregate, args.judge_model, args.extract_model)
@@ -364,6 +545,10 @@ def main():
     print(
         f"\nAggregate (pooled): P={format_pct(agg_precision)} R={format_pct(agg_recall)} "
         f"F1={format_pct(agg_f1)} (TP={total_tp} FP={total_fp} FN={total_fn})"
+    )
+    print(
+        f"Chain-aware recall (pooled): {format_pct(agg_chain_recall)} "
+        f"({total_chain_hit}/{total_chain_hit + total_chain_miss})"
     )
 
 
