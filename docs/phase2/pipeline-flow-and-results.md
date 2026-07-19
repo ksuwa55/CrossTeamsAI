@@ -14,6 +14,7 @@ Synthetic transcript + .labels.json (data/synthetic_transcripts/*.json)
   │   2. extract_causal_events()    — LLM call per candidate window → cause/effect/timestamp
   │   3. judge_compatibility_matrix() + max_bipartite_matching() — LLM judge vs. gold pairs
   │   4. evaluate_meeting()         — precision / recall / F1 per meeting
+  │   5. evaluate_meeting_chain_aware() — graph-reachability "chain-aware recall" (see below)
   │
   ▼  eval/inspect_false_negatives.py
       - For every unmatched gold pair, judge finds the closest prediction and a verdict
@@ -82,9 +83,42 @@ All 8 pooled false negatives were inspected by finding the closest predicted pai
 
 **Every missed gold pair had a partially-overlapping prediction** — the extractor never completely failed to notice a relationship, but it consistently split or re-scoped the gold cause/effect pair differently than the label. Typical pattern (`meeting_01_signoff_blocker`): gold pair is "customer records module can't be pushed → QA holding off on test cases"; the closest prediction is "delay in legal approval → stalled progress on writing test cases" — same effect area, but the cause is traced one hop further upstream than the label chose.
 
+## Chain-Aware Recall (Graph Reachability)
+
+The false-negative pattern above — every miss was a *partial* match, one hop upstream or
+downstream of the gold label's cause/effect scoping — motivated a second, graph-level
+recall metric in `eval/evaluate_causal_extraction.py`, alongside (not replacing) the
+strict pair-level P/R/F1 table above.
+
+**How it differs from the pair-level metric:** the pair-level match requires one predicted
+pair to match gold's cause *and* effect simultaneously. Chain-aware recall instead builds a
+small directed graph per meeting from the predicted pairs (raw predicted text as nodes, one
+edge per pair — deliberately not canonicalized; that stays downstream in
+`build_causal_graph.py`) and checks whether a *path* exists from a node matching gold's
+cause to a node matching gold's effect. Node equivalence is judged by the same LLM-judge
+method as the pair-level matching (`judge_node_matches`), just applied to a single phrase
+against candidate node phrases instead of a whole pair against candidate pairs. This means a
+gold pair now counts as recovered if the model traced cause → intermediate node → effect,
+even though no single predicted pair spans cause to effect directly — exactly the "traced
+one hop further upstream/short" pattern the false-negative inspection found.
+
+**What it doesn't capture:** it has no precision or F1 counterpart. Reachability over raw,
+uncanonicalized text has no well-defined "false positive edge" — an unrelated predicted
+node just sits off to the side of the graph, unreachable-relevant, rather than counting
+against the metric the way it would against pair-level precision. Read chain-aware recall
+as "how often the extractor's raw output *contains the causal story*, regardless of hop
+count," not as a replacement quality score — the pair-level P/R/F1 above is still the
+right metric for judging how closely predictions match the label's exact granularity.
+
+Numbers for this metric are produced by the same `evaluate_causal_extraction.py` run as
+the pair-level table above (see the "Chain-aware recall" section of
+`eval/results/causal_extraction/causal_extraction_report.md`); populating them here
+requires a fresh run against the current extraction output.
+
 ## Interpretation
 
 - **Recall (57.9%) is moderate-to-good** and the false-negative inspection shows the real number is better than it looks: 0 of 8 misses were genuine — the pipeline surfaced *something* related to every gold relationship, just not phrased/scoped identically.
 - **Precision (22.0%) is low, largely by construction of the matching strictness combined with the extractor's behavior**: the pipeline predicts ~2.6x as many pairs as there are gold pairs (50 vs. 19), because it tends to emit several finer-grained cause/effect pairs about the same underlying blocker (e.g. `meeting_04_api_dependency`: 8 predicted vs. 1 gold) rather than one pair matching the label's granularity.
 - **Practical implication for the DAG/dashboard**: canonicalization (`canonicalize_node()`) absorbs much of this granularity mismatch — many of the "extra" predicted pairs collapse onto the same canonical node pair in the graph, so the aggregate DAG is more robust to precision loss than the raw per-pair metric suggests. The per-pair precision/recall numbers above should be read as a lower bound on the extraction step's usefulness for the downstream graph, not a measure of the graph's own quality.
 - Two meetings (`meeting_03_missing_resource`, `meeting_05_decision_stagnation`) scored 0% precision/recall. This is flagged as a known limitation rather than addressed here — prompt or window-size tuning was intentionally left out of scope for this iteration (see "Known Limitations").
+- **Chain-aware recall (above) turns the "canonicalization absorbs granularity mismatch" claim into something measured at eval time**, rather than only an assertion about downstream behavior: it directly checks, per gold pair, whether the raw predicted graph contains a path expressing the same causal story, independent of hop count.
