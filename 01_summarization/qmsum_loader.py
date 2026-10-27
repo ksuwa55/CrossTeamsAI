@@ -8,7 +8,7 @@ def _concat_transcript(js) -> str:
         spk = seg.get("speaker") or "UNK"
         txt = seg.get("content") or ""
         txt = re.sub(r'[\u2600-\u26FF\u2700-\u27BF]+', '', txt)  # strip emoji
-        txt = re.sub(r'\b(uh+|um+)\b', '', txt, flags=re.IGNORECASE)
+        txt = re.sub(r'\b(uh+|um+)\b', '', txt, flags=re.IGNORECASE) #remove unmeaningful filler words
         txt = txt.strip()
         if txt:
             parts.append(f"{spk} [{i}]: {txt}")
