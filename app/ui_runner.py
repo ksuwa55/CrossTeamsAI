@@ -100,7 +100,7 @@ def ui_summarize(transcript: str, query: str, task: str,
     for ch in chunks:
         mp = build_query_prompt(query, ch, task=task)
         part = ms.run_summarizer(
-            mp, model="gpt-3.5-turbo", system_prompt=SYSTEM_PROMPT,
+            mp, model="gpt-4o-mini", system_prompt=SYSTEM_PROMPT,
             temperature=temperature, max_tokens=max_tokens
         ).strip()
         partials.append(part)
@@ -110,7 +110,7 @@ def ui_summarize(transcript: str, query: str, task: str,
     else:
         rp = build_reduce_prompt(query, partials, task=task)
         final = ms.run_summarizer(
-            rp, model="gpt-3.5-turbo", system_prompt=SYSTEM_PROMPT,
+            rp, model="gpt-4o-mini", system_prompt=SYSTEM_PROMPT,
             temperature=temperature, max_tokens=max_tokens
         ).strip()
 
@@ -138,7 +138,7 @@ with gr.Blocks(title="Meeting Summarizer") as demo:
             chunk_chars = gr.Slider(3000, 16000, value=9000, step=500, label="Chunk size (chars)")
             overlap_chars = gr.Slider(0, 2000, value=800, step=100, label="Overlap (chars)")
             temperature = gr.Slider(0.0, 1.0, value=0.0, step=0.1, label="Temperature")
-            max_tokens = gr.Slider(64, 512, value=320, step=16, label="Max tokens per call")
+            max_tokens = gr.Slider(256, 2048, value=1024, step=64, label="Max tokens per call")
             run_btn = gr.Button("Generate Summary", variant="primary")
 
     out_text = gr.Textbox(label="Summary", lines=12)
