@@ -51,7 +51,7 @@ work in academic writing.
 Project has two execution paths:
 
 * Path A (Single transcript summarization): `app/main.py` + `01_summarization/summarizer.py`
-* Path B (QMSum benchmark run): `app/cli_runner.py` + `01_summarization/qmsum_loader.py` + `01_summarization/summarizer.py`
+* Path B (QMSum benchmark run): `app/run_qmsum_benchmark.py` + `01_summarization/qmsum_loader.py` + `01_summarization/summarizer.py`
 
 ### `01_summarization/qmsum_loader.py`
 
@@ -67,7 +67,7 @@ What it does:
   * `input_text` (instruction + full transcript)
   * `reference` (gold summary)
 
-Used by: `app/cli_runner.py`
+Used by: `app/run_qmsum_benchmark.py`
 
 ### `01_summarization/summarizer.py`
 
@@ -90,9 +90,9 @@ Key responsibilities:
   * `save_summary()` writes JSON output
   * `log_experiment()` writes a run log to `logs/`
 
-Used by: `app/main.py`, `app/cli_runner.py`
+Used by: `app/main.py`, `app/run_qmsum_benchmark.py`
 
-### `app/cli_runner.py`
+### `app/run_qmsum_benchmark.py`
 
 Purpose: Run QMSum evaluation and write predictions to a JSONL file.
 

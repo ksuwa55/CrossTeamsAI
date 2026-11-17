@@ -40,7 +40,7 @@ run_experiment() {
   echo "============================================"
 
   # Generate predictions
-  python app/cli_runner.py \
+  python app/run_qmsum_benchmark.py \
     --qmsum_split_dir "$QMSUM_TEST_DIR" \
     --out_jsonl "$PRED_FILE" \
     --max_meetings 1000000 \

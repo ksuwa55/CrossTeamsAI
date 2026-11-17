@@ -53,7 +53,7 @@ run_model() {
   echo "  Model: $MODEL  (tag: $TAG)"
   echo "============================================"
 
-  python app/cli_runner.py \
+  python app/run_qmsum_benchmark.py \
     --qmsum_split_dir "$QMSUM_TEST_DIR" \
     --model "$MODEL" \
     --out_jsonl "$PRED_FILE" \

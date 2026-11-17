@@ -56,7 +56,7 @@ Three extractive baselines for context:
 
 ```bash
 # LLM-based predictions
-python app/cli_runner.py \
+python app/run_qmsum_benchmark.py \
   --qmsum_split_dir data/QMSum/data/ALL/test \
   --model gpt-3.5-turbo \
   --out_jsonl output/qmsum_test_preds.jsonl

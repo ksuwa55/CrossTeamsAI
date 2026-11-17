@@ -95,7 +95,7 @@ Yielded by `iter_qmsum()`:
 
 ### 1. Predictions JSONL
 
-Written by `cli_runner.py` and `baselines.py`.
+Written by `run_qmsum_benchmark.py` and `baselines.py`.
 
 ```jsonl
 {"meeting_id": "ES2004a", "query_id": "gen-0", "query": "...", "prediction": "...", "reference": "..."}

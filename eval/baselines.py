@@ -1,7 +1,7 @@
 """
 Baseline methods for QMSum query-focused meeting summarization.
 
-Produces JSONL output in the same format as cli_runner.py for direct
+Produces JSONL output in the same format as run_qmsum_benchmark.py for direct
 comparison via evaluate_qmsum.py.
 
 Baselines implemented:
@@ -24,7 +24,7 @@ from qmsum_loader import iter_qmsum
 # ─── helpers ───────────────────────────────────────────────────────
 
 def _extract_transcript(input_text: str) -> str:
-    """Same logic as cli_runner.extract_transcript_from_input_text."""
+    """Same logic as run_qmsum_benchmark.extract_transcript_from_input_text."""
     t_prefix = "Transcript:\n"
     idx = input_text.find(t_prefix)
     if idx == -1:

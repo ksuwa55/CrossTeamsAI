@@ -2,7 +2,7 @@
   "title": "Phase 1 — Meeting Summarization",
   "files_documented": [
     "01_summarization/",
-    "app/cli_runner.py",
+    "app/run_qmsum_benchmark.py",
     "app/ui_runner.py"
   ],
   "output_path": "docs/phase3/summarization.md",

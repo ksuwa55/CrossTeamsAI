@@ -59,7 +59,7 @@ Converts QMSum JSON files into per-query examples.
 - Cleans transcripts (strips emoji, filler words)
 - Yields `{meeting_id, query_id, query, input_text, reference}`
 
-### 3. CLI Runner (`app/cli_runner.py`)
+### 3. CLI Runner (`app/run_qmsum_benchmark.py`)
 
 Batch evaluation pipeline with map-reduce strategy.
 
@@ -123,7 +123,7 @@ QMSum JSON files (data/QMSum/data/ALL/test/*.json)
        ▼  qmsum_loader.iter_qmsum()
 Per-query examples
        │
-       ▼  cli_runner.py (map-reduce pipeline)
+       ▼  run_qmsum_benchmark.py (map-reduce pipeline)
 Predictions JSONL (output/qmsum_test_preds.jsonl)
        │
        ▼  evaluate_qmsum.py
@@ -147,7 +147,7 @@ Results JSON + CSV (eval/results/)
 ├── summarizer.py        # Core summarization engine
 ├── qmsum_loader.py      # QMSum dataset loader
 app/
-├── cli_runner.py         # Batch evaluation entry point
+├── run_qmsum_benchmark.py         # Batch evaluation entry point
 ├── ui_runner.py          # Gradio web UI
 eval/
 ├── evaluate_qmsum.py    # Evaluation metrics
