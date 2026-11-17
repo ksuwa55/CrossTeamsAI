@@ -1,3 +1,4 @@
+import csv
 import json
 import glob
 import os
@@ -256,13 +257,25 @@ def build_lifecycle(raw_dir: str, issue_id: str, data: dict, prs_index: dict) ->
     }
     return {"timeline": timeline, "linked_prs": linked_prs, "outcome_evidence": outcome}
 
+# CSV columns = keys of each "transcript" entry in the JSON output
+TRANSCRIPT_CSV_COLUMNS = ["evidence_id", "speaker", "is_bot", "timestamp", "text", "url"]
+
+def write_transcript_csv(transcript: list, out_path: str):
+    # utf-8-sig so Excel displays non-ASCII characters correctly
+    with open(out_path, "w", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(f, fieldnames=TRANSCRIPT_CSV_COLUMNS)
+        writer.writeheader()
+        writer.writerows(transcript)
+
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.dirname(script_dir)
     raw_dir = f"{base_dir}/raw"
-    processed_dir = f"{base_dir}/processed"
+    json_dir = f"{base_dir}/processed_json"
+    csv_dir = f"{base_dir}/processed_csv"
 
-    os.makedirs(processed_dir, exist_ok=True)
+    os.makedirs(json_dir, exist_ok=True)
+    os.makedirs(csv_dir, exist_ok=True)
     raw_files = sorted(glob.glob(f"{raw_dir}/issue_*.json"))
     
     if not raw_files:
@@ -276,11 +289,14 @@ def main():
         processed_data = convert_issue_to_transcript(rf)
         processed_data.update(build_lifecycle(raw_dir, issue_id, load_json(rf, {}), prs_index))
 
-        out_path = f"{processed_dir}/transcript_{issue_id}.json"
+        out_path = f"{json_dir}/transcript_{issue_id}.json"
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(processed_data, f, ensure_ascii=False, indent=2)
-            
-        print(f"Processed: {rf} -> {out_path} ({len(processed_data['transcript'])} entries, "
+
+        csv_path = f"{csv_dir}/transcript_{issue_id}.csv"
+        write_transcript_csv(processed_data["transcript"], csv_path)
+
+        print(f"Processed: {rf} -> {out_path}, {csv_path} ({len(processed_data['transcript'])} entries, "
               f"{len(processed_data['timeline'])} timeline events, {len(processed_data['linked_prs'])} linked PRs, "
               f"{processed_data['outcome_evidence']['implementation_evidence']})")
 

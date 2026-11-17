@@ -8,7 +8,8 @@ evidence; it does **not** annotate decisions or compute latencies (Steps 3–4 a
 
 ```
 scripts/retrieve_issues_k8s.sh   →  raw/        (download from GitHub)
-scripts/preprocess_k8s.py        →  processed/  (normalize + join)
+scripts/preprocess_k8s.py        →  processed_json/  (normalize + join)
+                                 →  processed_csv/   (transcript only, for manual annotation)
 ```
 
 ## Raw files (`raw/`)
@@ -27,7 +28,7 @@ closed the issue. Only GraphQL `ClosedEvent.closer` exposes the closing PR.
 `raw/prs/` is shared across all issues (24 PRs in total). Many are abandoned or
 unmerged attempts — a linked PR is a *candidate*, not proof of implementation.
 
-## Processed files (`processed/transcript_<id>.json`)
+## Processed files (`processed_json/transcript_<id>.json`)
 
 | Section | Contents |
 |---|---|
